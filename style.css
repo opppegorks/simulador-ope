@@ -1,0 +1,99 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', sans-serif;
+    
+    /* Foto del BMW con filtro translúcido para que no moleste a la vista al estudiar */
+    background-image: linear-gradient(rgba(244, 244, 244, 0.75), rgba(244, 244, 244, 0.75)), url('https://static.eldiario.es/clip/9d108208-9a23-4160-be90-b503459c7c14_16-9-discover-aspect-ratio_default_0.jpg'); 
+
+    background-size: cover;
+    background-position: center center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-color: #c11b2b; 
+}
+
+header {
+    background-color: rgba(193, 27, 43, 0.9);
+    color: white;
+    padding: 20px;
+    text-align: center;
+    border-bottom: 5px solid white;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+.container {
+    display: flex;
+}
+
+.menu-lateral {
+    width: 220px;
+    background-color: rgba(0, 0, 0, 0.7);
+    height: 100vh;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.menu-lateral button {
+    background-color: #c11b2b;
+    color: white;
+    border: 2px solid white;
+    padding: 12px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+/* ZONA CENTRAL: Transparente para dejar ver el coche */
+.zona-trabajo {
+    flex-grow: 1;
+    padding: 30px;
+    background: transparent !important;
+}
+
+/* ELIMINAMOS EL BLOQUE BLANCO GIGANTE (Forzado para que no falle) */
+.tarjeta, 
+section, 
+main, 
+#teoria, 
+#psicos, 
+#simulacro,
+.contenido-principal,
+#contenido-principal {
+    background: transparent !important;
+    background-color: transparent !important;
+    box-shadow: none !important;
+}
+
+/* BOTONES Y TARJETAS DE LOS TEMAS: Tipo cristal translúcido */
+.btn-opcion, 
+.tema-card, 
+.grid-temas > div,
+[id^="tema-"],
+[class*="tema"] {
+    display: block;
+    width: 100%;
+    padding: 15px;
+    margin: 10px 0;
+    background: rgba(255, 255, 255, 0.88) !important; 
+    border: 2px solid #c11b2b !important;
+    border-radius: 8px !important;
+    cursor: pointer;
+    text-align: left;
+    font-weight: 500;
+    backdrop-filter: blur(5px); /* Difumina un pelo el fondo detrás del botón */
+}
+
+h2 {
+    color: #c11b2b;
+    text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
+}
+
+.btn-opcion:hover, 
+.tema-card:hover,
+.grid-temas > div:hover {
+    background: #fdeaea !important;
+}
