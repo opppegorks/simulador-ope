@@ -1,0 +1,1018 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GORKA OPE ERTZAINTZA - ACCESO DIRECTO</title>
+
+    <script>
+    </script>
+
+    <style>
+        /* ESTILOS GENERALES */
+        body, html { margin: 0; padding: 0; height: 100%; font-family: 'Segoe UI', Arial, sans-serif; background: #f4f4f4; color: #333; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GORKA OPE ERTZAINTZA - SISTEMA INTEGRAL</title>
+    <style>
+        /* ESTILOS GENERALES */
+        body, html { margin: 0; padding: 0; height: 100%; font-family: 'Segoe UI', Arial, sans-serif; background: #f4f4f4; }
+        
+        /* HEADER */
+        header { background: #1a1a1a; color: white; padding: 20px; text-align: center; border-bottom: 5px solid #c11b2b; }
+        
+        .container-estudio { display: flex; min-height: calc(100vh - 100px); }
+        
+        /* MENÚ LATERAL */
+        .sidebar { width: 250px; background: #2c2c2c; padding: 20px; display: flex; flex-direction: column; gap: 10px; }
+        .sidebar button { padding: 15px; background: #3d3d3d; color: white; border: none; border-radius: 8px; cursor: pointer; text-align: left; font-size: 16px; transition: 0.3s; }
+        .sidebar button:hover { background: #c11b2b; padding-left: 25px; }
+
+        /* ZONA DE TRABAJO */
+        .zona-trabajo { flex: 1; padding: 30px; overflow-y: auto; }
+        .tarjeta { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        
+        /* CUADRICULA DE TEMAS */
+        .grid-temas { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 15px; margin-top: 25px; }
+        .tema-card { background: #f8f9fa; border: 1px solid #ddd; border-radius: 10px; padding: 15px; transition: 0.2s; }
+        .tema-card:hover { transform: translateY(-3px); box-shadow: 0 5px 10px rgba(0,0,0,0.05); }
+        .tema-card h4 { margin: 0 0 10px 0; color: #1a1a1a; }
+        .btn-accion { width: 100%; padding: 8px; margin-top: 5px; border-radius: 5px; border: none; cursor: pointer; font-size: 13px; font-weight: bold; }
+        .btn-resumen { background: #e2e8f0; color: #475569; }
+        .btn-test-tema { background: #fee2e2; color: #c11b2b; border: 1px solid #fecaca; }
+
+        /* VISOR Y MOTOR DE TEST */
+        #visor-test { display: none; margin-top: 30px; padding: 25px; background: #fff; border-top: 4px solid #c11b2b; border-radius: 8px; }
+        .opcion { display: block; padding: 15px; margin: 10px 0; background: #f8f9fa; border: 1px solid #ddd; border-radius: 8px; cursor: pointer; transition: 0.2s; }
+        .opcion:hover { background: #f1f5f9; border-color: #c11b2b; }
+        
+        /* ESTADOS DE RESPUESTA AUTOMÁTICA */
+        .opcion.correcta-verde { background: #22c55e !important; color: white; border-color: #16a34a; font-weight: bold; }
+        .opcion.incorrecta-roja { background: #ef4444 !important; color: white; border-color: #dc2626; }
+        
+        .btn-rojo { background: #c11b2b; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        .btn-rojo:hover { background: #991b1b; }
+        .btn-disabled { background: #ccc; color: #666; cursor: not-allowed; }
+
+        /* CONTADOR DE TIEMPO */
+        .caja-tiempo { background: #1a1a1a; color: #ffdddd; font-size: 18px; font-weight: bold; padding: 5px 15px; border-radius: 6px; border: 2px solid #c11b2b; }
+
+        /* PANTALLA REVISIÓN FIN DE TEST */
+        .caja-resultados { padding: 20px; background: #f8f9fa; border-radius: 10px; margin-bottom: 25px; border-left: 5px solid #1a1a1a; }
+        .item-revision { padding: 15px; background: #fff; border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom: 12px; }
+        .badge-incorrecta { background: #fee2e2; color: #ef4444; padding: 3px 8px; border-radius: 4px; font-weight: bold; font-size: 12px; }
+        .badge-correcta { background: #dcfce7; color: #22c55e; padding: 3px 8px; border-radius: 4px; font-weight: bold; font-size: 12px; }
+    </style>
+</head>
+<body>
+</div>
+
+    <header>
+        <h1>GORKA OPE ERTZAINTZA</h1>
+        <p id="subtitulo">SISTEMA INTEGRAL DE ESTUDIO</p>
+    </header>
+
+    <div class="container-estudio">
+        <nav class="sidebar">
+            <button onclick="seccion('teoria')">📚 Teoría y Tests</button>
+            <button onclick="seccion('psicos')">🧩 Psicotécnicos</button>
+            <button onclick="seccion('simulacro')">🚀 Simulacro General</button>
+        </nav>
+
+        <main class="zona-trabajo">
+            <section id="teoria">
+                <div class="tarjeta">
+                    <h2>Temas OPE</h2>
+                    <p>Visualiza el resumen o realiza un test aleatorio de 20 preguntas (Tiempo límite: 20 minutos. Corrección instantánea al hacer clic).</p>
+                    <div class="grid-temas" id="lista-temas-dinamica">
+                        </div>
+
+                    <div id="visor-test">
+                        <div id="meta-test" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+                            <h3 id="test-titulo" style="margin:0; color:#c11b2b;"></h3>
+                            <div style="display:flex; gap:15px; align-items:center;">
+                                <div id="test-tiempo" class="caja-tiempo" style="display:none;">⏳ 20:00</div>
+                                <span id="test-progreso" style="font-weight:bold; background:#eee; padding:5px 10px; border-radius:5px;"></span>
+                            </div>
+                        </div>
+                        
+                        <div id="test-contenido">
+                            <p id="pregunta-texto" style="font-size:18px; font-weight:bold;"></p>
+                            <div id="opciones-lista"></div>
+                            <button id="btn-navegacion" class="btn-rojo btn-disabled" style="width:auto; margin-top:20px; padding:12px 35px;" onclick="siguientePregunta()" disabled>Selecciona una respuesta</button>
+                        </div>
+                        
+                        <div id="test-resultados" style="display:none;"></div>
+                        
+                        <div id="resumen-texto" style="display:none; line-height:1.7;"></div>
+                    </div>
+                </div>
+            </section>
+
+         <section id="psicos" style="display:none;">
+        <div class="tarjeta">
+            <h2>Práctica de Psicotécnicos</h2>
+            <p>Selecciona la categoría que deseas entrenar para la OPE:</p>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 20px;">
+                
+                <div style="background: #ffffff; border: 2px solid #e0e0e0; border-radius: 12px; padding: 20px; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 4px 6px rgba(0,0,0,0.05);" 
+                     onclick="alert('El panel interactivo de series de figuras se cargará aquí automáticamente.')"
+                     onmouseover="this.style.borderColor='#0056b3'; this.style.transform='translateY(-2px)';" 
+                     onmouseout="this.style.borderColor='#e0e0e0'; this.style.transform='translateY(0)';">
+                    <div style="font-size: 2rem; margin-bottom: 10px;">🧩</div>
+                    <h3 style="margin: 0 0 8px 0; color: #333;">Sinónimos</h3>
+                    <p style="margin: 0; font-size: 0.9rem; color: #666;">Mismo significado.</p>
+                </div>
+
+                  <div style="background: #ffffff; border: 2px solid #e0e0e0; border-radius: 12px; padding: 20px; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 4px 6px rgba(0,0,0,0.05);" 
+                     onclick="alert('El panel interactivo de series de figuras se cargará aquí automáticamente.')"
+                     onmouseover="this.style.borderColor='#0056b3'; this.style.transform='translateY(-2px)';" 
+                     onmouseout="this.style.borderColor='#e0e0e0'; this.style.transform='translateY(0)';">
+                    <div style="font-size: 2rem; margin-bottom: 10px;">🧩</div>
+                    <h3 style="margin: 0 0 8px 0; color: #333;">Antónimos</h3>
+                    <p style="margin: 0; font-size: 0.9rem; color: #666;">Contrario significado.</p>
+                </div>
+
+                <div style="background: #ffffff; border: 2px solid #e0e0e0; border-radius: 12px; padding: 20px; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 4px 6px rgba(0,0,0,0.05);" 
+                     onclick="comenzarTest('psico_analogias')" 
+                     onmouseover="this.style.borderColor='#c11b2b'; this.style.transform='translateY(-2px)';" 
+                     onmouseout="this.style.borderColor='#e0e0e0'; this.style.transform='translateY(0)';">
+                    <div style="font-size: 2rem; margin-bottom: 10px;">🔄</div>
+                    <h3 style="margin: 0 0 8px 0; color: #333;">Analogías</h3>
+                    <p style="margin: 0; font-size: 0.9rem; color: #666;">Relaciones lógicas entre palabras y conceptos.</p>
+                </div>
+
+                <div style="background: #ffffff; border: 2px solid #e0e0e0; border-radius: 12px; padding: 20px; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 4px 6px rgba(0,0,0,0.05);" 
+                     onclick="comenzarTest('psico_refranes')" 
+                     onmouseover="this.style.borderColor='#28a745'; this.style.transform='translateY(-2px)';" 
+                     onmouseout="this.style.borderColor='#e0e0e0'; this.style.transform='translateY(0)';">
+                    <div style="font-size: 2rem; margin-bottom: 10px;">📚</div>
+                    <h3 style="margin: 0 0 8px 0; color: #333;">Refranes y Comprensión</h3>
+                    <p style="margin: 0; font-size: 0.9rem; color: #666;">Significados, opuestos y equivalencias verbales populares.</p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+<script>
+    // =========================================================================
+<section id="simulacro" style="display:none;">
+        <div class="tarjeta" style="text-align: center;" id="inicio-simulacro">
+            <h2>Simulador de Examen Real</h2>
+            <p>Se seleccionarán 45 preguntas aleatorias de todo el temario de teoría.</p>
+            <p>Tiempo máximo: 45 minutos. (El examen se corregirá solo al agotar el tiempo).</p>
+            <button onclick="comenzarSimulacroGlobal()" style="padding: 20px 40px; background: #1a1a1a; color: white; border: none; border-radius: 10px; font-size: 20px; cursor: pointer; margin-top: 20px;">🚀 COMENZAR SIMULACRO (45 min / 45p)</button>
+        </div>
+    </section>
+</main>
+</div>
+
+<script>
+    // Variables de control globalizadas y seguras
+    window.preguntasActuales = window.preguntasActuales || [];
+    window.indicePregunta = window.indicePregunta || 0;
+    window.respuestasUsuario = window.respuestasUsuario || [];
+
+    let relojSimulacroInterval = null;
+    let tiempoSimulacroRestante = 45 * 60;
+
+    function comenzarSimulacroGlobal() {
+        // 1. Gestión de pantallas
+        if(document.getElementById('simulacro')) document.getElementById('simulacro').style.display = 'none';
+        if(document.getElementById('psicos')) document.getElementById('psicos').style.display = 'none';
+        if(document.getElementById('teoria')) document.getElementById('teoria').style.display = 'block';
+        
+        const visorTest = document.getElementById('visor-test');
+        if (visorTest) visorTest.style.display = 'block';
+
+        if(document.getElementById('resumen-texto')) document.getElementById('resumen-texto').style.display = 'none';
+        if(document.getElementById('test-contenido')) document.getElementById('test-contenido').style.display = 'block';
+        if(document.getElementById('test-resultados')) document.getElementById('test-resultados').style.display = 'none';
+
+        if(document.getElementById('test-titulo')) {
+            document.getElementById('test-titulo').innerText = "🚀 Simulacro General OPE Ertzaintza";
+        }
+
+        // 2. Filtrado e inyección de datos
+        if (typeof banco !== 'undefined') {
+            let preguntasTeoria = banco.filter(p => typeof p.t === 'number');
+            preguntasTeoria.sort(() => Math.random() - 0.5);
+            window.preguntasActuales = preguntasTeoria.slice(0, 45);
+        } else {
+            alert("Error: No se encuentra el 'banco' de preguntas abajo de este script.");
+            return;
+        }
+
+        window.indicePregunta = 0;
+        window.respuestasUsuario = [];
+
+        // 3. Control e inicio del Reloj
+        const cajaTiempo = document.getElementById('test-tiempo');
+        if(cajaTiempo) {
+            cajaTiempo.style.display = 'block'; 
+            tiempoSimulacroRestante = 45 * 60; 
+            
+            let pintarReloj = () => {
+                let minutos = Math.floor(tiempoSimulacroRestante / 60);
+                let segundos = tiempoSimulacroRestante % 60;
+                cajaTiempo.innerText = `⏳ ${minutos < 10 ? '0' : ''}${minutos}:${segundos < 10 ? '0' : ''}${segundos}`;
+            };
+            
+            pintarReloj();
+            if(relojSimulacroInterval) clearInterval(relojSimulacroInterval);
+            
+            relojSimulacroInterval = setInterval(function() {
+                tiempoSimulacroRestante--;
+                pintarReloj();
+                
+                if (tiempoSimulacroRestante <= 0) {
+                    clearInterval(relojSimulacroInterval);
+                    alert("⚠️ ¡Tiempo agotado! El simulacro se corregirá automáticamente.");
+                    finalizarSimulacroAutonomo();
+                }
+            }, 1000);
+        }
+
+        // 4. Pintar la primera pregunta de forma forzada
+        if (window.preguntasActuales.length > 0) {
+            renderizarPreguntaSimulacro();
+        } else {
+            alert("Error: No hay preguntas teóricas disponibles.");
+        }
+    }
+
+    // FUNCIÓN PROPIA DE RENDERIZADO (Evita que el visor aparezca vacío)
+    function renderizarPreguntaSimulacro() {
+        const p = window.preguntasActuales[window.indicePregunta];
+        
+        // Progreso numérico
+        const progreso = document.getElementById('test-progreso');
+        if(progreso) {
+            progreso.innerText = `${window.indicePregunta + 1} / ${window.preguntasActuales.length}`;
+        }
+        
+        // Texto de la pregunta
+        const txtPregunta = document.getElementById('pregunta-texto');
+        if(txtPregunta) txtPregunta.innerText = p.q;
+        
+        // Contenedor de opciones
+        const opcionesLista = document.getElementById('opciones-lista');
+        if(opcionesLista) {
+            opcionesLista.innerHTML = '';
+            p.a.forEach((opcionText, i) => {
+                const letra = String.fromCharCode(65 + i); 
+                const divOpcion = document.createElement('div');
+                divOpcion.className = 'opcion';
+                divOpcion.innerHTML = `<strong>${letra})</strong> ${opcionText}`;
+                divOpcion.onclick = () => evaluarRespuestaSimulacro(divOpcion, i);
+                opcionesLista.appendChild(divOpcion);
+            });
+        }
+
+        // Botón de abajo (Inicialmente deshabilitado)
+        const btnNavegacion = document.getElementById('btn-navegacion');
+        if (btnNavegacion) {
+            btnNavegacion.className = 'btn-rojo btn-disabled';
+            btnNavegacion.innerText = "Selecciona una respuesta";
+            btnNavegacion.disabled = true;
+            btnNavegacion.onclick = null;
+        }
+    }
+
+    // CONTROL DE CLICS Y CORRECCIÓN VISUAL
+    function evaluarRespuestaSimulacro(elementoSeleccionado, indiceSeleccionado) {
+        const p = window.preguntasActuales[window.indicePregunta];
+        const opcionesLista = document.getElementById('opciones-lista');
+        const divsOpciones = opcionesLista.getElementsByClassName('opcion');
+
+        // Bloquear nuevos clics
+        for (let div of divsOpciones) {
+            div.style.pointerEvents = 'none';
+        }
+
+        // Guardar respuesta del opositor
+        window.respuestasUsuario.push({
+            pregunta: p.q,
+            opciones: p.a,
+            correcta: p.c,
+            respondida: indiceSeleccionado
+        });
+
+        // Aplicar estilos CSS correspondientes
+        if (indiceSeleccionado === p.c) {
+            elementoSeleccionado.classList.add('correcta-verde');
+        } else {
+            elementoSeleccionado.classList.add('incorrecta-roja');
+            if(divsOpciones[p.c]) divsOpciones[p.c].classList.add('correcta-verde');
+        }
+
+        // Activar el botón de navegación inferior
+        const btnNavegacion = document.getElementById('btn-navegacion');
+        if (btnNavegacion) {
+            btnNavegacion.className = 'btn-rojo';
+            btnNavegacion.disabled = false;
+            
+            if (window.indicePregunta === window.preguntasActuales.length - 1) {
+                btnNavegacion.innerText = "🏁 FINALIZAR SIMULACRO";
+                btnNavegacion.onclick = finalizarSimulacroAutonomo;
+            } else {
+                btnNavegacion.innerText = "SIGUIENTE PREGUNTA ➡️";
+                btnNavegacion.onclick = avanzarPreguntaSimulacro;
+            }
+        }
+    }
+
+    function avanzarPreguntaSimulacro() {
+        if (window.indicePregunta < window.preguntasActuales.length - 1) {
+            window.indicePregunta++;
+            renderizarPreguntaSimulacro();
+        } else {
+            finalizarSimulacroAutonomo();
+        }
+    }
+
+    function finalizarSimulacroAutonomo() {
+        clearInterval(relojSimulacroInterval);
+        if(document.getElementById('test-tiempo')) document.getElementById('test-tiempo').style.display = 'none';
+        if(document.getElementById('test-contenido')) document.getElementById('test-contenido').style.display = 'none';
+        
+        const testResultados = document.getElementById('test-resultados');
+        if(testResultados) {
+            testResultados.style.display = 'block';
+            
+            let correctas = window.respuestasUsuario.filter(r => r.respondida === r.correcta).length;
+            let falladas = window.respuestasUsuario.length - correctas;
+            
+            testResultados.innerHTML = `
+                <div class="tarjeta" style="text-align:center;">
+                    <h3>Fin del Simulacro</h3>
+                    <p style="font-size: 1.2rem;">Preguntas respondidas: <strong>${window.respuestasUsuario.length}</strong></p>
+                    <p style="color: green; font-size: 1.1rem;">Aciertos: <strong>${correctas}</strong></p>
+                    <p style="color: red; font-size: 1.1rem;">Fallos: <strong>${falladas}</strong></p>
+                    <button onclick="location.reload()" style="margin-top:15px; padding:10px 20px; background:#1a1a1a; color:white; border:none; border-radius:5px; cursor:pointer;">Volver al Inicio</button>
+                </div>
+            `;
+        }
+    }
+</script>
+
+<script>
+        // BANCO DE PREGUNTAS (Tema 15 ampliado con tus 50 preguntas en total)
+        const banco = [
+            {t: 1, q: "¿En qué año se aprobó la Declaración Universal de DDHH?", a: ["1945", "1948", "1950", "1936"], c: 1},
+            {t: 40, q: "¿Qué general falleció en el sitio de Bilbao en 1874?", a: ["Espartero", "Zumalacárregui", "General Concha", "Prim"], c: 2},
+            {t: 1, q: "¿En qué fecha se firmó el Convenio Europeo de Derechos Humanos en Roma?", a: ["5 de mayo de 1949", "4 de noviembre de 1950", "6 de diciembre de 1978", "1 de enero de 1952"], c: 1},
+
+  // ==========================================
+    
+        // ==========================================
+        // TEST DE ANALOGÍAS - ACADEMIA BELANDIA (CORREGIDO)
+        // ==========================================
+        {
+            t: "psico_analogias",
+            q: "Neumático es a caucho, como vaso es a...",
+            a: ["transparencia", "rueda", "elasticidad", "vidrio", "ventana"],
+            c: 3 // 1-D (vidrio)
+        },
+        {
+            t: "psico_analogias",
+            q: "Metro es a longitud, como kilo es a...",
+            a: ["peso", "gramo", "potencia", "anchura"],
+            c: 0 // 2-A (peso)
+        },
+        {
+            t: "psico_analogias",
+            q: "Sastre es a aguja, como herrero es a...",
+            a: ["tijeras", "yunque", "pincel", "lápiz"],
+            c: 1 // 3-B (yunque)
+        },
+        {
+            t: "psico_analogias",
+            q: "Renacuajo es a rana, como larva es a...",
+            a: ["pájaro", "buey", "mariposa", "saltamontes"],
+            c: 2 // 4-C (mariposa)
+        },
+        {
+            t: "psico_analogias",
+            q: "Libro es a biblioteca, como obra de arte es a...",
+            a: ["admiración", "almacén", "belleza", "artista", "museo"],
+            c: 4 // 5-E (museo)
+        },
+        {
+            t: "psico_analogias",
+            q: "Cuartel es a militar, como fábrica es a...",
+            a: ["trabajo", "chimenea", "sargento", "salario", "obrero"],
+            c: 4 // 6-E (obrero)
+        },
+        {
+            t: "psico_analogias",
+            q: "Cuadrado es a cubo, como círculo es a...",
+            a: ["elipse", "superficie", "esfera", "cono", "volumen"],
+            c: 2 // 7-C (esfera)
+        },
+        {
+            t: "psico_analogias",
+            q: "Rivera es a río, como playa es a...",
+            a: ["barco", "país", "mar", "puerto", "arena"],
+            c: 2 // 8-C (mar)
+        },
+        {
+            t: "psico_analogias",
+            q: "Flor es a fruto, como antes es a...",
+            a: ["después", "producto", "pasado", "otoño", "hoja"],
+            c: 0 // 9-A (después)
+        },
+        {
+            t: "psico_analogias",
+            q: "Alegría es a tristeza, como amor es a...",
+            a: ["dolor", "odio", "miedo", "placer", "recuerdo"],
+            c: 1 // 10-B (odio)
+        },
+        {
+            t: "psico_analogias",
+            q: "Ciertamente es a quizás, como evidente es a...",
+            a: ["convencido", "negado", "posible", "oficial", "verdadero"],
+            c: 2 // 11-C (posible)
+        },
+        {
+            t: "psico_analogias",
+            q: "Cruz es a cara, como reverso es a...",
+            a: ["moneda", "lado", "azar", "anverso", "enfrente"],
+            c: 3 // 12-D (anverso)
+        },
+        {
+            t: "psico_analogias",
+            q: "Placer es a felicidad, como desgracia es a...",
+            a: ["ansiedad", "terror", "dolor", "ofensa", "idea"],
+            c: 3 // 13-D (ofensa)
+        },
+        {
+            t: "psico_analogias",
+            q: "Lamento es a pasado, como esperanza es a...",
+            a: ["sentimiento", "futuro", "tristeza", "presente", "alegría"],
+            c: 1 // 14-B (futuro)
+        },
+        {
+            t: "psico_analogias",
+            q: "Aprobar es a contradecir, como permitir es a...",
+            a: ["prohibir", "mentir", "expulsar", "conceder", "reflexionar"],
+            c: 0 // 15-A (prohibir)
+        },
+        {
+            t: "psico_analogias",
+            q: "Caminar es a bailar, como hablar es a...",
+            a: ["cantar", "decir", "correr", "amar", "saltar"],
+            c: 0 // 16-A (cantar)
+        },
+        {
+            t: "psico_analogias",
+            q: "Abeja es a enjambre, como uva es a...",
+            a: ["vino", "racimo", "miel", "planta", "fruto"],
+            c: 1 // 17-B (racimo)
+        },
+        {
+            t: "psico_analogias",
+            q: "Suponer es a probar, como probable es a...",
+            a: ["discutible", "cierto", "erróneo", "refutado", "poderoso"],
+            c: 1 // 18-B (cierto)
+        },
+        {
+            t: "psico_analogias",
+            q: "Cifra es a número, como letra es a...",
+            a: ["palote", "cálculo", "pluma", "palabra", "escritura"],
+            c: 3 // 19-D (palabra)
+        },
+        {
+            t: "psico_analogias",
+            q: "Esforzarse es asigas a conseguir, como luchar es a...",
+            a: ["vencer", "perder", "combatir", "fatigar", "enriquecer"],
+            c: 0 // 20-A (vencer)
+        },
+        {
+            t: "psico_analogias",
+            q: "Cuaderno es a página, como año es a...",
+            a: ["siglo", "día", "mundo", "calendario", "escolar"],
+            c: 1 // 21-B (día)
+        },
+        {
+            t: "psico_analogias",
+            q: "Un poco es a nada, como a veces es a...",
+            a: ["duración", "frecuentemente", "cantidad", "nunca", "siempre"],
+            c: 3 // 22-D (nunca)
+        },
+        {
+            t: "psico_analogias",
+            q: "Fuego es a calor, como causa es a...",
+            a: ["motivo", "bienestar", "efecto", "humo", "conclusión"],
+            c: 2 // 23-C (efecto)
+        },
+        {
+            t: "psico_analogias",
+            q: "Minoría es a mayoría, como algunos es a...",
+            a: ["varios", "población", "oposición", "poco", "la mayor parte"],
+            c: 4 // 24-E (la mayor parte)
+        },
+        {
+            t: "psico_analogias",
+            q: "Nunca es a frecuentemente, como nada es a...",
+            a: ["todo", "poco", "a veces", "siempre", "mucho"],
+            c: 4 // 25-E (mucho)
+        }, // <--- ESTA COMA ES IMPORTANTE PARA QUE SIGAN LOS TEMAS DE ABAJO
+
+            // === TEMA 40: HISTORIA DEL SIGLO XIX ===
+        {t: 40, q: "¿Quiénes fueron los principales protagonistas enfrentados en la Segunda Guerra Carlista?", a: ["Alfonso XII y Amadeo I", "Carlos VI, duque de Madrid, e Isabel II", "Juan Carlos I y Franco", "Espartero y Fernando VII"], c: 1},
+
+            // === TEMA 40: HISTORIA DEL SIGLO XIX ===
+    {t: 40, q: "¿Quiénes fueron los principales protagonistas enfrentados en la Segunda Guerra Carlista?", a: ["Alfonso XII y Amadeo I", "Carlos VI, duque de Madrid, e Isabel II", "Juan Carlos I y Franco", "Espartero y Fernando VII"], c: 1},
+
+    // === TEMA 41: HISTORIA DEL SIGLO XX ===
+    {t: 41, q: "¿En qué fecha finalizó oficialmente la Guerra Civil española?", a: ["18 de julio de 1936", "14 de abril de 1931", "1 de abril de 1939", "6 de diciembre de 1978"], c: 2},
+    {t: 41, q: "¿En qué fecha se proclamó la Segunda República española?", a: ["14 de abril de 1931", "1 de abril de 1939", "12 de octubre de 1936", "25 de octubre de 1979"], c: 0},
+    {t: 41, q: "Tras la proclamación de la Segunda República, ¿quién fue el primer presidente de la República?", a: ["Manuel Azaña", "Niceto Alcalá-Zamora", "Adolfo Suárez", "Emilio Castelar"], c: 1},
+    {t: 41, q: "¿En qué fecha se aprobó el primer Estatuto de Autonomía del País Vasco?", a: ["25 de octubre de 1979", "6 de diciembre de 1978", "1 de abril de 1939", "1 de octubre de 1936"], c: 3},
+    {t: 41, q: "¿En qué fecha se aprobó el segundo Estatuto de Autonomía del País Vasco (Estatuto de Gernika)?", a: ["25 de octubre de 1979", "1 de octubre de 1936", "14 de abril de 1931", "4 de noviembre de 1950"], c: 0},
+
+    {t: 45, q: "¿Quién es el jefe de la Policia Local?", a: ["El concejal de seguridad", "El suboficial", "El director de recursos humanos", "El alcalde"], c: 3},
+
+// ==========================================
+        // TEMA 13 - LOS ACTOS ADMINISTRATIVOS
+        // ==========================================
+        {
+            t: 13,
+            q: "Serán motivados los actos administrativos:",
+            a: ["Siempre.", "Los que rechacen pruebas propuestas por los interesados.", "Los dictados en uso de potestades discrecionales.", "Las respuestas b y c son correctas."],
+            c: 3 // d
+        },
+        {
+            t: 13,
+            q: "Los actos administrativos se producirán:",
+            a: ["Por escrito.", "Por medios electrónicos.", "Por otros medios más adecuados.", "Todas las respuestas son correctas."],
+            c: 3 // d
+        },
+        {
+            t: 13,
+            q: "Las resoluciones de carácter particular no podrán vulnerar lo establecido en:",
+            a: ["Una disposición de carácter general.", "Una resolución de un superior jerárquico.", "Una resolución de un órgano de igual jerarquía.", "Ninguna respuesta es correcta."],
+            c: 0 // a
+        },
+        {
+            t: 13,
+            q: "Son nulas las resoluciones administrativas que vulneren lo establecido en:",
+            a: ["Disposición reglamentaria.", "Disposición ejecutiva.", "Disposición normativa.", "Disposición funcional."],
+            c: 0 // a
+        },
+        {
+            t: 13,
+            q: "Los actos administrativos son ejecutivos con arreglo a lo establecido en:",
+            a: ["La ley 39/2015.", "Ley 30/1992.", "La Ley de jurisdicción contencioso administrativa.", "El Código Administrativo."],
+            c: 0 // a
+        },
+        {
+            t: 13,
+            q: "Como norma general los actos administrativos producen efecto desde:",
+            a: ["Que la fecha en que se dicten.", "Su notificación.", "Su publicación.", "Su aprobación superior."],
+            c: 0 // a
+        },
+        {
+            t: 13,
+            q: "¿Cuándo podrá otorgarse eficacia retroactiva a un acto administrativo?",
+            a: ["Cuando se dicten en sustitución de actos nulos.", "Cuando se dicten en sustitución de actos anulados.", "Cuando produzcan efectos favorables al interesado.", "Las respuestas b y c son correctas."],
+            c: 3 // d
+        },
+        {
+            t: 13,
+            q: "Toda notificación deberá ser cursada, desde que haya sido dictada, en el plazo de:",
+            a: ["10 días.", "15 días.", "1 mes.", "30 días."],
+            c: 0 // a
+        },
+        {
+            t: 13,
+            q: "Las notificaciones se practicarán preferentemente:",
+            a: ["Por escrito.", "Por medios electrónicos.", "De forma oral.", "Por publicaciones."],
+            c: 1 // b
+        },
+        {
+            t: 13,
+            q: "Cuando el interesado o su representante rechace la notificación:",
+            a: ["Se hará constar y se suspenderá el procedimiento.", "Se hará constar y seguirá el procedimiento.", "Se hará constar y se tendrá que volver a notificar al interesado en los tres días siguientes.", "Ninguna respuesta es correcta."],
+            c: 1 // b
+        },
+        {
+            t: 13,
+            q: "Cuando al interesado se le notifiquen por diversos cauces los actos administrativos, se tomará como fecha de notificación:",
+            a: ["La notificación escrita.", "La notificación electrónica.", "La notificada en primer lugar.", "La última notificación realizada."],
+            c: 2 // c
+        },
+        {
+            t: 13,
+            q: "En las notificaciones escritas realizadas en el domicilio del interesado, cuando este no se halle presente, se podrá hacer cargo de la notificación:",
+            a: ["Cualquier persona autorizada por el interesado, que esté en el domicilio.", "Cualquier persona que esté en el domicilio.", "Cualquier persona mayor de 18 años que esté en el domicilio.", "Cualquier persona mayor de 14 años que esté en el domicilio."],
+            c: 4 // d
+        },
+        {
+            t: 13,
+            q: "Los actos administrativos serán objeto de publicación en todo caso, cuando:",
+            a: ["El destinatario sea conocido.", "El destinatario sea una pluralidad determinada de personas.", "Cuando el destinatario sea una pluralidad indeterminada de personas.", "Cuando no se trate de un procedimiento selectivo."],
+            c: 2 // c
+        },
+        {
+            t: 13,
+            q: "Es causa de nulidad de pleno derecho:",
+            a: ["La incompetencia jerárquica.", "La incompetencia formal.", "La incompetencia territorial.", "Son correctas las respuestas a y b."],
+            c: 2 // c
+        },
+        {
+            t: 13,
+            q: "Es causa de nulidad de pleno derecho:",
+            a: ["Un acto con contenido imposible.", "Un acto dictado con incompetencia formal.", "Un acto presunto.", "Un acto expreso."],
+            c: 0 // a
+        },
+        {
+            t: 13,
+            q: "Como norma general, el silencio administrativo en los procedimientos iniciados a solicitud del interesado tendrá efecto estimatorio:",
+            a: ["En los procedimientos de impugnación de actos.", "En los procedimientos en ejercicio del derecho de petición.", "Cuando así lo establezca una norma de la unión europea.", "Ninguna respuesta es correcta."],
+            c: 3 // d
+        },
+        {
+            t: 13,
+            q: "Es causa de anulabilidad:",
+            a: ["La incompetencia material.", "La incompetencia territorial.", "La incompetencia jerárquica.", "Ninguna respuesta es correcta."],
+            c: 2 // c
+        },
+        {
+            t: 13,
+            q: "Cuando la notificación por medios electrónicos sea de carácter obligatorio, o haya sido expresamente elegida por el interesado, se entenderá rechazada cuando hayan transcurrido:",
+            a: ["Diez días hábiles desde la puesta a disposición de la notificación sin que se acceda a su contenido.", "Diez días naturales desde la puesta a disposición de la notificación sin que se acceda a su contenido.", "Cinco días hábiles desde la puesta a disposición de la notificación sin que se acceda a su contenido.", "Cinco días hábiles desde la puesta a disposición de la notificación sin que se acceda a su contenido."],
+            c: 1 // b
+        },
+        {
+            t: 13,
+            q: "El certificado acreditativo del silencio producido, se expedirá de oficio por el órgano competente para resolver en el plazo:",
+            a: ["De quince días naturales desde que expire el plazo máximo para resolver el procedimiento.", "De diez días desde que expire el plazo máximo para resolver el procedimiento.", "De quince días desde que expire el plazo máximo para resolver el procedimiento.", "De diez días naturales desde que expire el plazo máximo para resolver el procedimiento."],
+            c: 2 // c
+        },
+        {
+            t: 13,
+            q: "En los casos de estimación por silencio administrativo, la resolución expresa posterior a la producción del acto sólo podrá dictarse de ser:",
+            a: ["Confirmatoria del mismo.", "Denegatoria del mismo.", "Presunta.", "Ninguna respuesta es correcta."],
+            c: 0 // a
+        },
+
+// === TEMA 0: PERMISO POR PUNTOS DE TRÁFICO ===
+    {t: 0, q: "¿Qué infracción detrae 6 puntos del permiso de conducir en relación con ciclistas?", a: ["No usar el alumbrado reglamentario", "Adelantar a ciclistas sin dejar al menos 1,5 metros de separación", "Estacionar en carril bici", "Circular por vía interurbana sin chaleco reflectante"], c: 1},
+    {t: 0, q: "En el permiso por puntos, ¿cuántos puntos adicionales (teniendo los 12 puntos iniciales) se obtienen tras los primeros tres años sin cometer infracciones que supongan pérdida de puntos?", a: ["1 punto", "4 puntos", "3 puntos", "2 puntos"], c: 3},
+
+// === TEMA 44: LEY DE POLICÍA DEL PAÍS VASCO ===
+    {t: 44, q: "¿Cuál es el plazo de prescripción de las infracciones y sanciones del régimen disciplinario?", a: ["Infracciones: Muy graves 2 años, graves 1 año, leves 6 meses. Sanciones: Muy graves 3 años, graves 2 años, leves 1 año.", "Infracciones: Muy graves 2 años, graves 1 año, leves 1 año. Sanciones: Muy graves 3 años, graves 2 años, leves 1 año.", "Infracciones: Muy graves 2 años, graves 1 año, leves 1 año. Sanciones: Muy graves 3 años, graves 2 años, leves 6 meses.", "Infracciones: Muy graves 3 años, graves 2 años, leves 6 meses. Sanciones: Muy graves 3 años, graves 2 años, leves 1 año."], c: 0},
+
+    // === TEMA 28: TRÁFICO Y SEGURIDAD VIAL ===
+    {t: 28, q: "¿Qué es la masa máxima autorizada (MMA)?", a: ["La masa máxima para la utilización de un vehículo con carga en circulación por las vías públicas.", "Masa del vehículo, con su equipo fijo autorizado, sin personal de servicio, pasajeros ni carga, y con su dotación completa.", "La que gravita sobre el suelo, transmitida por la totalidad de las ruedas acopladas a ese eje.", "La masa efectiva del vehículo y de su carga, incluida la masa del personal de servicio y de los pasajeros."], c: 0},
+    {t: 28, q: "Una vía específicamente acondicionada para la circulación de ciclos recibe la denominación de:", a: ["Vía ciclable", "Vía ciclista", "Calzada bici", "Carril bici"], c: 1},
+    {t: 28, q: "¿Qué define mejor una autopista?", a: ["Carretera convencional con arcén de más de 1,5 metros.", "Vía reservada exclusivamente a la circulación de automóviles, con una sola calzada y con limitación total de accesos.", "Carretera especialmente proyectada, construida y señalizada para la exclusiva circulación de automóviles y con limitación de accesos a las propiedades colindantes.", "Carretera especialmente proyectada, construida y señalizada para la exclusiva circulación de automóviles y con acceso limitado a ella las propiedades colindantes."], c: 2},
+            
+            // --- PREGUNTAS TEMA 15 (Originales) ---
+            {t: 15, q: "El incumplimiento de órdenes de servicio:", a: ["Afecta a la validez de los actos, y da lugar a responsabilidad disciplinaria.", "No afecta a la validez de los actos, y no da lugar a responsabilidad disciplinaria.", "No afecta a la validez de los actos, pero da lugar a responsabilidad disciplinaria.", "Ninguna respuesta es correcta."], c: 2},
+            {t: 15, q: "Como norma general, la competencia es:", a: ["Renunciable.", "Irrenunciable.", "Transmisible.", "Irretroactiva."], c: 1},
+            {t: 15, q: "Los órganos de las diferentes administraciones públicas pueden delegar el ejercicio de competencias en:", a: ["Otros órganos de distinta administración pública.", "Otros órganos de la misma administración pública.", "Otros órganos de la misma unidad administrativa exclusivamente.", "Ninguna respuesta es correcta."], c: 1},
+            {t: 15, q: "No podrá ser objeto de delegación asuntos relativos a:", a: ["Jefatura de Estado.", "Gobierno de la nación.", "Cortes generales.", "Ninguno de los anteriores se puede delegar."], c: 3},
+            {t: 15, q: "La delegación de competencias y su revocación deberá ser:", a: ["Notificada.", "Publicada en el boletín oficial correspondiente.", "Certificada por el órgano delegado.", "Ninguna respuesta es correcta."], c: 1},
+            {t: 15, q: "La delegación será revocable:", a: ["En cualquier momento antes del inicio del expediente.", "En cualquier momento anterior a la resolución.", "En cualquier momento.", "La delegación no se puede revocar."], c: 2},
+            {t: 15, q: "En caso de avocación:", a: ["Será obligatorio notificarla a los interesados.", "No será obligatorio notificarla a los interesados.", "La avocación no se puede dar nunca.", "Se deberá de hacer sin necesidad de acuerdo motivado."], c: 0},
+            {t: 15, q: "Contra el acuerdo de avocación:", a: ["Se podrá interponer recurso administrativo.", "Cabrá recurso pero sólo en el contencioso administrativo.", "No cabrá recurso alguno.", "Sí cabe recurso pero sólo pasados 20 días desde la resolución de avocación."], c: 2},
+            {t: 15, q: "La realización de actividades de carácter técnico o material podrá ser objeto de:", a: ["Delegación.", "Avocación.", "Suplencia.", "Encomienda de gestión."], c: 3},
+            {t: 15, q: "La delegación de firma:", a: ["Deberá ser notificada a los interesados.", "Alterará la competencia del órgano delegante.", "No será necesaria su publicación.", "Será necesaria para su validez su publicación."], c: 2},
+            {t: 15, q: "La suplencia:", a: ["Deberá ser notificada a los interesados.", "Alterará la competencia del órgano delegante.", "No será necesaria su publicación.", "Será necesaria para su validez su publicación."], c: 2},
+            {t: 15, q: "Los conflictos de atribuciones se podrán suscitar:", a: ["Entre órganos de distintas administraciones públicas.", "Entre órganos de la misma administración pública.", "Entre órganos jerárquicamente dependientes.", "Respecto de asuntos sobre los que haya finalizado el procedimiento."], c: 1},
+            {t: 15, q: "El secretario de un órgano colegiado:", a: ["Debe ser miembro del propio órgano.", "Velará por el cumplimiento de la legalidad formal y material.", "Será nombrado mediante publicación en el boletín oficial correspondiente.", "Será una persona, que no necesariamente estará al servicio de la administración pública."], c: 1},
+            {t: 15, q: "Para la válida constitución del órgano colegiado es necesario:", a: ["Que estén al menos Presidente y Secretario.", "Que estén al menos Presidente, Secretario, y 1/3 de los miembros del órgano colegiado.", "Que estén al menos Presidente, Secretario, y 1/2 de los miembros del órgano colegiado de manera presencial.", "Que estén al menos Presidente, Secretario, y 1/2 de los miembros del órgano colegiado de manera presencial o a distancia."], c: 3},
+            {t: 15, q: "Los acuerdos del órgano colegiado se adoptarán:", a: ["Por mayoría simple.", "Por mayoría cualificada.", "Por mayoría de votos.", "Por mayoría absoluta."], c: 2},
+            {t: 15, q: "¿Quién levanta las actas de las reuniones celebradas por el órgano colegiado?", a: ["El presidente.", "Todos los miembros del órgano colegiado.", "Los portavoces.", "El secretario."], c: 3},
+            {t: 15, q: "Contra la recusación:", a: ["No cabrá recurso.", "Sí cabrá recurso, pero se interpondrá en el momento que se decida la recusación.", "Se alegará al interponer el recurso que proceda contra el acto que ponga fin al procedimiento.", "Ninguna respuesta es correcta."], c: 0},
+            {t: 15, q: "¿Qué plazo tiene el superior para resolver sobre la recusación?:", a: ["A 5 días.", "B 6 días.", "C 3 días.", "D 1 mes."], c: 2},
+            {t: 15, q: "Tener interés personal en un asunto es motivo:", a: ["De recusación.", "De abstención.", "De avocación.", "Las respuestas a y b son correctas."], c: 3},
+            {t: 15, q: "Los conflictos de atribuciones solo podrán suscitarse entre:", a: ["Entre órganos de distintas administraciones.", "Entre órganos de una misma administración.", "Entre órganos de una misma administración relacionados jerárquicamente.", "Entre órganos de una misma administración no relacionados jerárquicamente."], c: 3},
+            
+            // --- NUEVAS PREGUNTAS TEMA 15 AÑADIDAS ---
+            {t: 15, q: "¿Qué carácter tiene la actuación de los órganos administrativos?", a: ["Carácter preceptivo.", "Carácter voluntario.", "Carácter facultativo.", "Ninguna es correcta."], c: 0},
+            {t: 15, q: "¿Cuál de los siguientes es un requisito para la creación de un órgano administrativo?", a: ["Denominación de su integración en la administración pública.", "Delimitación de sus funciones y competencia.", "Dotación de los créditos necesarios para su puesta en marcha y funcionamiento.", "Todas son correctas."], c: 3},
+            {t: 15, q: "¿Cuándo NO se podrán crear órganos?", a: ["Cuando supongan duplicidad de otros ya existentes.", "Cuando sean órganos similares a otros ya existentes.", "La A y la B son correctas.", "Todas son incorrectas."], c: 0},
+            {t: 15, q: "¿Cómo podrán dirigir los órganos administrativos las actividades de los órganos que dependen de ellos jerárquicamente?", a: ["Mediante supervisión.", "Mediante instrucciones.", "Mediante órdenes de servicio.", "La B y la C son correctas."], c: 3},
+            {t: 15, q: "¿Cómo puede articularse la administración consultiva?", a: ["Mediante órganos genéricos.", "Mediante órganos específicos.", "Mediante órganos independientes.", "Todas son correctas."], c: 1},
+            {t: 15, q: "¿Cómo es la competencia?", a: ["Renunciable.", "Irrenunciable.", "Es irrenunciable y se ejercerá por los órganos que la tengan atribuida como propia.", "Es irrenunciable, se ejercerá por los órganos que la tengan atribuida como propia, salvo en delegación o avocación."], c: 3},
+            {t: 15, q: "¿En qué caso NO podrán ser objeto de delegación de competencias?", a: ["Cuando se refieran a asuntos con la Jefatura del Estado.", "Con la presidencia del gobierno.", "Presidencias de los consejos de gobierno de las comunidades.", "Todas son correctas."], c: 3},
+            {t: 15, q: "¿Por quién se consideran dictadas las resoluciones administrativas que se adopten por delegación?", a: ["Por el órgano delegante.", "Por el órgano delegado.", "Por ambos dependiendo del asunto o materia.", "Ninguna es correcta."], c: 0},
+            {t: 15, q: "¿Cuál es la afirmación correcta?", a: ["La delegación no podrá ser revocada en ningún momento.", "La delegación será revocable en el plazo de un mes.", "La delegación será revocable en cualquier momento.", "Ninguna es correcta."], c: 2},
+            {t: 15, q: "¿Qué circunstancias son necesarias para que se produzca la avocación?", a: ["Circunstancias de índole económica.", "Circunstancias de índole técnico.", "Circunstancias de índole jurídica.", "Todas son correctas."], c: 3},
+            {t: 15, q: "¿Quién podrá avocar el conocimiento del asunto en los supuestos de delegación de competencias en órganos no dependientes jerárquicamente?", a: ["Por el órgano delegado.", "Por el órgano delegante.", "Por ambos dependiendo del asunto o materia.", "Ninguna es correcta."], c: 1},
+            {t: 15, q: "¿Qué recurso cabe contra el acuerdo de avocación?", a: ["Recurso de suplicación.", "Recurso de reforma.", "Recurso de amparo.", "No cabe recurso."], c: 3},
+            {t: 15, q: "¿Cuál es la circunstancia por la que se da una encomienda de gestión?", a: ["Por razones de eficacia.", "Cuando no se posean medios técnicos.", "Cuando no se posean medios económicos.", "La A y la B son correctas."], c: 3},
+            {t: 15, q: "¿Qué supone la encomienda de gestión?", a: ["La cesión de la titularidad de la competencia.", "La cesión del ejercicio de la competencia.", "La A y la B son correctas.", "Ninguna es correcta."], c: 3},
+            {t: 15, q: "¿Cuál de las siguientes afirmaciones es correcta?", a: ["La delegación de la firma alterará la competencia del órgano delegante.", "Para su validez no es necesaria la publicación.", "La delegación de firma supondrá la cesión del ejercicio.", "Todas son correctas."], c: 1},
+            {t: 15, q: "Anule las causas de abstención si no es motivo directo: ¿Cuáles son los motivos de abstención para no intervenir en un procedimiento?", a: ["Tener interés personal en el asunto.", "Tener vínculo matrimonial.", "Haber intervenido como testigo o perito.", "Todas son correctas."], c: 3},
+            {t: 15, q: "¿Quiénes podrán promover la recusación?", a: ["Los interesados en el momento inicial del procedimiento.", "Los interesados en cualquier momento de la tramitación del procedimiento.", "Los interesados y familiares en cualquier momento del procedimiento.", "Ninguna es correcta."], c: 1},
+            {t: 15, q: "¿En qué plazo puede resolver el superior si el recusado niega la recusación?", a: ["15 días.", "3 días.", "5 días.", "10 días."], c: 1},
+            {t: 15, q: "👉 ¿Qué recurso cabe ante las resoluciones adoptadas en el supuesto de una recusación?", a: ["Recurso de súplica.", "Recurso de reforma.", "Recurso de amparo.", "No cabe recurso."], c: 3},
+            {t: 15, q: "En cuanto a la delegación de competencias y su revocación:", a: ["Aunque no deben publicarse en ninguna parte…", "La delegación deberá publicarse en el BOE…", "Las delegaciones de competencias y su revocación deberán publicarse en el BOE…", "Las competencias delegadas no pueden ser revocadas…"], c: 2},
+            {t: 15, q: "Cuando los órganos superiores avocan para sí el conocimiento…", a: ["Deberán realizar la avocación mediante acuerdo motivado frente al que no cabrá recurso.", "…cabrá recurso en 10 días.", "…no se puede avocar.", "…no requiere motivación."], c: 0},
+            {t: 15, q: "Que los titulares de los órganos administrativos deleguen la firma…", a: ["No altera su competencia.", "…debe constar en la resolución y actos.", "…debe constar también el órgano de procedencia.", "Las respuestas a) y c) son correctas."], c: 3},
+            {t: 15, q: "Cuando un órgano administrativo se estime incompetente para resolver un asunto:", a: ["Tiene que remitir directamente las actuaciones al órgano competente notificándolo a los interesados.", "Se abstiene y deja actor a los interesados.", "Es indiferente qué órgano resuelva.", "Los órganos no pueden estimarse incompetentes."], c: 0},
+            {t: 15, q: "En relación con la incompetencia administrativa y el traslado de actuaciones…", a: ["Los interesados pueden dirigirse al órgano competente.", "Los interesados no pueden pedir inhibición.", "Pueden dirigirse al órgano que esté conociendo del asunto para que decline competencia.", "Las opciones a) y c) son válidas."], c: 3},
+            {t: 15, q: "El uso de la palabra “conocer” en la Ley del Régimen Jurídico del Sector Público significa:", a: ["Tener vinculación con los interesados.", "Saber mucho de un tema.", "Tener atribuida la competencia de instruir y/o resolver el procedimiento.", "Los órganos no pueden “conocer”."], c: 2},
+            {t: 15, q: "Son funciones del presidente de un órgano colegiado:", a: ["Presidir las sesiones.", "Dirimir con su voto los empates.", "Visar las actas.", "Todas son correctas."], c: 3},
+            {t: 15, q: "¿Quién puede ser secretario de un órgano colegiado?", a: ["Una persona al servicio de la administración pública correspondiente.", "Una persona funcionaria de la administración.", "Un miembro del órgano colegiado.", "A) y C) son correctas."], c: 3},
+            {t: 15, q: "¿Cómo se pueden convocar y celebrar las sesiones del órgano colegiado?", a: ["De manera presencial siempre.", "Tanto de manera presencial como a distancia.", "De manera presencial o a distancia.", "Siempre a distancia."], c: 2},
+            {t: 15, q: "¿Qué medios electrónicos se consideran válidos para una sesión a distancia?", a: ["Telefónicos y audiovisuales.", "El correo electrónico, las audioconferencias y las videoconferencias.", "El teléfono móvil, las videoconferencias y el correo electrónico.", "Zoom, Skype y Facetime."], c: 1},
+            {t: 15, q: "¿Cuándo se entiende válidamente constituido el órgano colegiado?", a: ["Cuando asista presencial o a distancia, el presidente, el secretario y la mitad al menos de sus miembros.", "Cuando asista presencial o a distancia, el presidente, el secretario, o en su caso, de quienes les suplan, y la totalidad de sus miembros.", "Cuando asista presencial o a distancia el secretario, la totalidad de sus miembros o en su caso quienes les suplan.", "Cuando asista presencial o a distancia, el presidente, el secretario, o en su caso, de quienes les suplan, y la mitad al menos de sus miembros."], c: 3},
+            {t: 15, q: "¿En qué caso pueden celebrar sesión sin convocatoria previa?", a: ["Cuando asista presencial o a distancia, el presidente, el secretario y la mitad al menos de sus miembros.", "Cuando asista presencial o a distancia, el presidente, el secretario, o en su caso, de quienes les suplan, y la totalidad de sus miembros.", "Cuando asista presencial o a distancia el secretario, la totalidad de sus miembros o en su caso quienes les suplan.", "Cuando asista presencial o a distancia, el presidente, el secretario, o en su caso, de quienes les suplan, y la mitad al menos de sus miembros."], c: 2},
+            {t: 15, q: "Señala la verdadera respecto al régimen de las convocatorias del órgano colegiado:", a: ["El régimen de convocatorias siempre viene previsto en la ley.", "Podrán establecer los órganos colegiados el régimen propio de convocatorias siempre.", "Podrán establecer los órganos colegiados el régimen propio de convocatorias si está no está previsto por sus normas de funcionamiento.", "No podrán establecer el régimen de convocatorias."], c: 2},
+            {t: 15, q: "¿Cómo se envían las convocatorias?", a: ["Siempre por medios electrónicos serán remitidas a los miembros del órgano colegiado.", "Salvo que no resulte posible, las convocatorias serán remitidas a los miembros del órgano colegiado a través de medios electrónicos.", "Por medios electrónicos, salvo que acrediten que son sujetos no obligados a relacionarse electrónicamente con la administración.", "En papel."], c: 1},
+            {t: 15, q: "¿Qué tiene que contener la convocatoria?", a: ["Los asistentes, el orden del día, el sistema de conexión y los puntos de deliberaciones.", "El orden del día, las condiciones en las que se va a celebrar la sesión, el sistema de conexión y en su caso, los lugares en que estén disponibles los medios técnicos necesarios para asistir y participar en la reunión.", "Los asistentes, el orden del día, el sistema de conexión y los acuerdos alcanzados.", "Ninguna es verdadera."], c: 1},
+            {t: 15, q: "👉 ¿En qué caso se puede debatir un asunto que no se encuentre en el orden del día?", a: ["Cuando asista presencial o a distancia, el presidente, el secretario y la mitad al menos de sus miembros.", "Cuando asista presencial o a distancia, el presidente, el secretario, o en su caso, de quienes les suplan, y la totalidad de sus miembros.", "Cuando asista presencial o a distancia el secretario, la totalidad de sus miembros o en su caso quienes les suplan.", "Cuando asistan todos los miembros del órgano colegiado y sea declarada la urgencia del asunto por el voto favorable de la mayoría."], c: 3},
+            {t: 15, q: "¿Cómo se adoptan los acuerdos?", a: ["Por mayoría absoluta de votos.", "Por unanimidad.", "Por mayoría de votos.", "Por mayoría de dos tercios."], c: 2},
+            {t: 15, q: "Cuando la reunión sea a distancia, ¿dónde se entiende que han sido adoptados los acuerdos?", a: ["En el lugar donde tenga la sede el órgano colegiado y, en su defecto, donde esté ubicada la sede del presidente.", "En el lugar donde tenga la sede el órgano colegiado y, en su defecto, el lugar mas cercano a la sede.", "En el lugar donde tenga la sede el órgano colegiado y, en su defecto, donde esté ubicada la presidencia.", "Ninguna es verdadera."], c: 2},
+            {t: 15, q: "¿En qué casos quedarán exentos de responsabilidad por los acuerdos adoptados los miembros del órgano colegiado?", a: ["Voten en contra o no voten.", "Voten en contra o se abstengan.", "Solo si votan en contra.", "Solo si no votan."], c: 1},
+            {t: 15, q: "¿Quién expide el certificado sobre los acuerdos?", a: ["El presidente.", "El secretario.", "El órgano colegiado.", "El alcalde."], c: 1},
+            {t: 15, q: "¿Cómo será expedido el certificado?", a: ["Por medios electrónicos, salvo que no sea posible.", "Por medios electrónicos siempre y en todo caso.", "En papel.", "Por medios electrónicos, salvo que el interesado manifieste expresamente lo contrario y no tenga obligación de relacionarse con las administraciones por esta vía."], c: 3},
+            {t: 15, q: "¿Quiénes pueden solicitar este certificado?", a: ["Cualquier ciudadano que se relacione con la administración.", "El interesado.", "Los que acrediten la titularidad de un interés legítimo.", "Los miembros del órgano colegiado."], c: 2},
+            {t: 15, q: "¿Quién levanta el acta?", a: ["Los miembros del órgano colegiado.", "El presidente.", "El secretario.", "Ninguna es verdadera."], c: 2},
+            {t: 15, q: "¿Qué tiene que contener el acta?", a: ["Los asistentes, el orden del día, el sistema de conexión y los puntos de deliberaciones.", "El orden del día, las condiciones en las que se va a celebrar la sesión, el sistema de conexión y en su caso, los lugares en que estén disponibles los medios técnicos necesarios para asistir y participar en la reunión.", "Los asistentes, el orden del día, el sistema de conexión y los acuerdos alcanzados.", "Los asistentes, el orden del día, las circunstancias del lugar y tiempo en que se ha celebrado, los puntos principales de deliberaciones y los acuerdos alcanzados."], c: 3},
+            {t: 15, q: "¿Cuándo se tiene que aprobación el acta?", a: ["En la misma sesión.", "En la misma sesión o en la inmediata siguiente.", "En la inmediata siguiente.", "Siempre y en todo caso, el mismo día de la sesión."], c: 1},
+            {t: 15, q: "¿Quién le da el visto bueno al acta?", a: ["El presidente.", "El órgano colegiado.", "Los miembros del órgano colegiado.", "El secretario."], c: 0},
+            {t: 15, q: "¿En qué casos se puede sustituir al presidente?", a: ["Vacante, ausencia, enfermedad, abstención o recusación.", "Vacante, ausencia, enfermedad u otra causa legal.", "Vacante, ausencia, enfermedad u otra causa justificada.", "Vacante, ausencia o enfermedad."], c: 1},
+            {t: 15, q: "¿Quién sustituye al presidente?", a: ["Por el vicepresidente.", "Por el vicepresidente y, en su defecto, por el miembro del órgano colegiado de mayor edad, antigüedad y jerarquía.", "Por el vicepresidente y, en su defecto, por el miembro del órgano colegiado de mayor jerarquía, antigüedad y edad.", "Por el vicepresidente y, en su defecto, por el miembro del órgano colegiado de mayor antigüedad, jerarquía y edad."], c: 2},
+            {t: 15, q: "¿Con cuánto tiempo tienen derecho los miembros del órgano colegiado a recibir la convocatoria?", a: ["Antelación de 2 días.", "Antelación mínima de 2 días.", "Antelación de 3 días.", "La puede recibir el mismo día si el asunto es urgente."], c: 1},
+            {t: 15, q: "¿En qué casos se puede sustituir a un miembro del órgano colegiado?", a: ["Ausencia, vacante o enfermedad.", "Ausencia, enfermedad o causa justificada.", "Ausencia, vacante u otra causa legal.", "Ausencia, vacante, enfermedad, abstención o recusación."], c: 1},
+            {t: 15, q: "¿Cuándo estamos ante un órgano colegiado?", a: ["Los que están integrados por 3 personas.", "Los que están integrados por 4 personas.", "Los que están integrados por 3 o más personas.", "Los que están integrados por 4 o más personas."], c: 2},
+            {t: 41, q: "¿En qué fecha finalizó oficialmente la guerra civil española?", a: ["18 de julio de 1936", "14 de abril de 1931", "1 de abril de 1939", "6 de diciembre de 1978"], c: 2},
+
+// === TEMA 36: LEY DE GESTIÓN DE EMERGENCIAS Y PROTECCIÓN CIVIL ===
+{t: 36, q: "¿Cuál es el objeto de la Ley de Gestión de Emergencias?", a: ["Regular exclusivamente los servicios de bomberos.", "Limitar la actuación de los municipios en emergencias.", "Regular solo la protección civil estatal en Euskadi.", "Ordenar y coordinar las actuaciones de las administraciones públicas en la prevención y gestión de emergencias."], c: 3},
+{t: 36, q: "La finalidad de la ley se dirige principalmente a la protección de:", a: ["Solo las personas.", "Personas, bienes y patrimonio colectivo.", "Solo bienes públicos.", "Exclusivamente infraestructuras críticas."], c: 1},
+{t: 36, q: "Entre las acciones que deben desarrollar las administraciones públicas vascas se encuentra:", a: ["La privatización de los servicios de emergencia.", "La supresión de los planes de emergencia municipales.", "El estudio y evaluación de las situaciones susceptibles de generar riesgos.", "La sustitución de la autoprotección por seguros privados."], c: 2},
+{t: 36, q: "Los ciudadanos participan en los fines de esta ley:", a: ["Solo cuando sean empleados públicos.", "Únicamente mediante obligaciones impuestas por sentencia.", "Solo a través de asociaciones registradas.", "Cumpliendo sus deberes y prestando colaboración voluntaria en la forma prevista legalmente."], c: 3},
+{t: 36, q: "Las relaciones entre las administraciones públicas vascas en esta materia se someten, entre otros, a los principios de:", a: ["Jerarquía, dependencia y exclusividad.", "Coordinación, colaboración, solidaridad y lealtad institucional.", "Centralización, subordinación y unilateralidad.", "Exclusión competencial y reserva de actuación."], c: 1},
+{t: 36, q: "El sistema de gestión de emergencias que garantiza la ley debe ser:", a: ["Temporal y sectorial.", "Integrado y compatible.", "Municipal y voluntario.", "Privado y descentralizado."], c: 1},
+{t: 36, q: "En materia de protección civil, todas las personas residentes en la Comunidad Autónoma tienen derecho a:", a: ["Ser indemnizadas siempre que exista alerta meteorológica.", "Desobedecer órdenes de evacuación si no las comparten.", "Dirigir operativos de intervención.", "Ser informadas sobre los riesgos colectivos graves que puedan afectarles."], c: 3},
+{t: 36, q: "Entre los derechos reconocidos está:", a: ["Recibir información e instrucciones sobre medidas de seguridad y conducta a seguir.", "Elegir libremente el plan de protección civil aplicable.", "Suspender la actuación de los servicios de emergencia.", "Exigir compensación económica por cualquier simulacro."], c: 0},
+{t: 36, q: "La ley reconoce el derecho de las personas a:", a: ["Participar en el proceso de elaboración de los planes que puedan afectarles directamente.", "Aprobar definitivamente los planes de protección civil.", "Sustituir a la autoridad competente en caso de desacuerdo.", "Vetar los mapas de riesgos."], c: 0},
+{t: 36, q: "También se reconoce el derecho a:", a: ["Acceder sin límites a datos reservados.", "Exigir la suspensión de cualquier actividad peligrosa sin procedimiento.", "Ser eximido de toda obligación de autoprotección.", "Formular quejas, peticiones y propuestas ante las autoridades y servicios de protección civil."], c: 3},
+{t: 36, q: "En caso de emergencies, las personas tienen derecho a que:", a: ["Las víctimas sean identificadas lo antes posible y se informe con precisión a familiares o allegados.", "Toda información se reserve hasta el final de la emergencia.", "Solo se informe a los medios de comunicación.", "La identificación dependa exclusivamente de autorización judicial."], c: 0},
+{t: 36, q: "El deber general de colaboración en tareas de protección civil alcanza a:", a: ["Solo a los mayores de edad.", "Solo a quienes residan en capitales de provincia.", "Todas las personas residentes en la Comunidad Autónoma.", "Solo a quienes formen parte de agrupaciones de voluntariado."], c: 2},
+{t: 36, q: "Entre las obligaciones generales se encuentra:", a: ["Adoptar, mantener y aplicar los planes y medidas de autoprotección legalmente preceptivos.", "Contratar obligatoriamente un seguro privado de emergencias.", "Facilitar datos personales de terceros sin límite.", "Integrarse en un servicio público de intervención."], c: 0},
+{t: 36, q: "También constituye un deber general:", a: ["Colaborar en los simulacros solo si son remunerados.", "Comunicar a la autoridad la existencia de situaciones de riesgo.", "Esperar instrucciones judiciales antes de avisar.", "Actuar por cuenta propia sin atender al plan."], c: 1},
+{t: 36, q: "Las instrucciones y órdenes de las autoridades competentes en protección civil deben cumplirse:", a: ["Solo si se comparten personalmente.", "Solo por los servicios públicos.", "Por sus destinatarios, de acuerdo con la ley.", "Únicamente si constan por escrito notarial."], c: 2},
+{t: 36, q: "En casos de catástrofe, calamidad pública o grave riesgo colectivo, cualquier persona estará obligada a:", a: ["Poner sus bienes a la venta.", "Realizar las prestaciones personales exigidas por la autoridad competente.", "Integrarse permanentemente en un servicio de emergencias.", "Financiar los medios de protección civil."], c: 1},
+{t: 36, q: "En situaciones de emergencia, la autoridad competente puede:", a: ["Requisar temporalmente bienes.", "Expropiar definitivamente sin procedimiento.", "Imponer sanciones penales directas.", "Suspender indefinidamente derechos fundamentales por decisión administrativa ordinaria."], c: 0},
+{t: 36, q: "Las medidas adoptadas en emergencia, como regla general, deben ser:", a: ["Ilimitadas en el tiempo.", "Proporcionadas a la entidad del riesgo.", "Automáticamente indemnizables.", "Idénticas en todo caso."], c: 1},
+{t: 36, q: "Los sujetos especialmente obligados a colaborar con las autoridades de protección civil incluyen:", a: ["Solo los cuerpos policiales.", "Solo los ayuntamientos.", "Personas y entidades cuya actividad resulte relevante para la protección civil.", "Únicamente empresas de transporte."], c: 2},
+{t: 36, q: "Entre esos sujetos especialmente obligados se encuentran:", a: ["Las personas o entidades obligadas a adoptar medidas de autoprotección por su vulnerabilidad o peligrosidad.", "Solo las compañías aseguradoras.", "Solo los medios públicos de comunicación.", "Solo las empresas con más de 250 trabajadores."], c: 0},
+{t: 36, q: "También son sujetos especialmente objetos:", a: ["Los servicios de vigilancia y protección frente a riesgos de empresas públicas o privadas.", "Únicamente los servicios de extinción de incendios.", "Solo las asociaciones vecinales.", "Solo los titulares de montes catalogados."], c: 0},
+{t: 36, q: "Entre los especialmente obligados figuran asimismo:", a: ["Los partidos políticos.", "Solo las entidades bancarias.", "Solo los concesionarios de autopistas.", "Los titulares de derechos sobre bienes públicos o quienes gestionen servicios públicos de interés general."], c: 3},
+{t: 36, q: "Los medios de comunicación social, según la ley:", a: ["Quedan al margen de la protección civil.", "Están especialmente obligados a colaborar.", "Solo colaboran si existe convenio previo.", "Solo colaboran a cambio de compensación económica."], c: 1},
+{t: 36, q: "Las personas y entidades especialmente obligadas deben proporcionar a las autoridades:", a: ["Información sobre sus actividades destinadas a asegurar la protección adecuada y sobre riesgos detectados.", "Solo su contabilidad anual.", "Solo planes de evacuación internos no actualizados.", "Únicamente datos cuando haya fallecidos."], c: 0},
+{t: 36, q: "Los servicios de vigilancia y protección frente a riesgos de empresas públicas o privadas:", a: ["No pueden ser incluidos en planes de protección civil.", "Se consideran colaboradores a todos los efectos en la protección civil.", "Solo actúan si media contrato mercantil.", "Sustituyen a los servicios públicos."], c: 1},
+{t: 36, q: "Cuando la alerta o la emergencia lo requiera, los medios de comunicación deben:", a: ["Publicar avisos solo si los consideran veraces.", "Limitarse a redes sociales.", "Esperar autorización judicial.", "Transmitir o publicar los avisos e instrucciones de forma prioritaria, inmediata y gratuita."], c: 3},
+{t: 36, q: "La autoridad competente en materia de protección civil puede dictar órdenes e instrucciones:", a: ["Solo internas para funcionarios.", "Que afecten a derechos de la ciudadanía en los términos establecidos por las leyes.", "Sin límite material alguno.", "Solo en tiempo de paz."], c: 1},
+{t: 36, q: "Entre las medidas que puede adoptar la autoridad competente se encuentra:", a: ["El confinamiento de personas en sus domicilios o en lugares seguros.", "La privación definitiva de la propiedad.", "La supresión de elecciones municipales.", "La clausura permanente de cualquier empresa."], c: 0},
+{t: 36, q: "El ámbito del capítulo de protección civil comprende:", a: ["Cualquier emergencia sanitaria ordinaria.", "La actuación de las administraciones vascas en situaciones de grave riesgo, catástrofe o calamidad pública.", "Solo incendios forestales.", "Solo emergencias municipales."], c: 1},
+{t: 36, q: "El órgano superior de dirección y coordinación de la protección civil de la Comunidad Autónoma, en el ámbito de sus competencias, es:", a: ["El lehendakari individualmente.", "El Parlamento Vasco.", "El Gobierno Vasco.", "La Comisión de Protección Civil de Euskadi."], c: 2},
+{t: 36, q: "Corresponde al Gobierno Vasco:", a: ["Aprobar el Plan de Protección Civil de Euskadi y los planes especiales.", "Homologar únicamente planes municipales.", "Dictar sanciones penales.", "Aprobar solo los planes forales."], c: 0},
+{t: 36, q: "El órgano responsable de la política de protección civil de la Comunidad Autónoma es:", a: ["La diputación foral correspondiente.", "El departamento del Gobierno Vasco competente en materia de seguridad pública.", "El centro coordinador municipal.", "El servicio vasco de meteorología."], c: 1},
+{t: 36, q: "Corresponde al departamento competente en materia de seguridad pública:", a: ["Elaborar las disposiciones generales en materia de protección civil que deban elevarse al Consejo de Gobierno.", "Aprobar por sí mismo las leyes autonómicas.", "Dirigir siempre cualquier emergencia municipal sin excepción.", "Aprobar los reglamentos orgánicos municipales."], c: 0},
+{t: 36, q: "Corresponde asimismo a ese departamento:", a: ["Nombrar alcaldes en caso de emergencia.", "Crear todos los parques de bomberos municipales.", "Aprobar los presupuestos forales.", "Disponer la aplicación del Plan de Protección Civil de Euskadi y ejercer su dirección única y coordinación."], c: 3},
+{t: 36, q: "Los territorios históricos, dentro de su ámbito competencial, deben:", a: ["Elaborar y aprobar el plan de protección civil de su territorio histórico.", "Aprobar el Plan de Protección Civil de Euskadi.", "Sustituir a los municipios en toda competencia de protección civil.", "Asumir automáticamente toda emergencia local."], c: 0},
+{t: 36, q: "A los municipios les corresponde:", a: ["Aprobar leyes autonómicas de protección civil.", "Promover la creación de una estructura municipal de protección civil.", "Homologar los planes de la comunidad autónoma.", "Declarar la emergencia catastrófica autonómica."], c: 1},
+{t: 36, q: "También corresponde a los municipios:", a: ["Elaborar y aprobar el plan municipal de protección civil.", "Aprobar los planes especiales autonómicos.", "Declarar el interés supracomunitario.", "Coordinar a todas las diputaciones forales."], c: 0},
+{t: 36, q: "Según la ley, el alcalde es:", a: ["Un órgano consultivo sin funciones ejecutivas en protección civil.", "La máxima autoridad municipal de protección civil.", "El director del Plan de Protección Civil de Euskadi.", "El único órgano competente para homologar planes."], c: 1},
+{t: 36, q: "La Comisión de Protección Civil de Euskadi es:", a: ["Un órgano jurisdiccional especializado.", "Un órgano colegiado de coordinación y cooperación de las administraciones públicas en materia de protección civil.", "Un órgano exclusivamente municipal.", "Un ente privado de apoyo técnico."], c: 1},
+{t: 36, q: "La Comisión de Protección Civil de Euskadi estará representada por:", a: ["La Administración del Estado, los territorios históricos y la Administración municipal.", "Las instituciones comunes de la Comunidad Autónoma, los territorios históricos y la Administración municipal.", "Las instituciones comunes de la Comunidad Autónoma, la Administración del Estado, y los territorios históricos.", "Las instituciones comunes de la Comunidad Autónoma, la Administración del Estado, los territorios históricos y la Administración municipal."], c: 3},
+{t: 36, q: "¿Quién informa previo a su aprobación sobre el Plan General de Protección Civil de Euskadi?", a: ["Consejo de Protección Civil de Euskadi.", "Comité de Protección Civil de Euskadi.", "Departamento del Gobierno Vasco con competencia en Materia de Seguridad.", "Comisión de Protección Civil de Euskadi."], c: 3},
+{t: 36, q: "¿Cuáles de las siguientes funciones no forma parte de las funciones del Departamento competente en materia de seguridad pública?", a: ["Elaborar las disposiciones de carácter general en materia de protección civil que deban ser elevadas al Consejo de Gobierno para su aprobación, así como su desarrollo y ejecución.", "Elaborar el inventario de riesgos y el catálogo de recursos movilizables de la Comunidad Autónoma.", "Elaborar el Plan de Protección Civil de Euskadi y los planes especiales que se integren en aquél.", "Todas ellas son funciones del Departamento."], c: 3}
+        ];
+
+
+        const temasInfo = [
+            {id: 0, n: "Puntos Tráfico"},
+            {id: 1, n: "Derechos Humanos"},
+            {id: 13, n: "Actos Administrativos"},
+            {id: 15, n: "Régimen Jurídico"},
+            {id: 19, n: "Ley 39/2015"},
+            {id: 28, n: "Conceptos Básicos Seg.Vial"},
+            {id: 36, n: "Gestión de Emergencias"},
+            {id: 39, n: "Primeros Auxilios"},
+            {id: 40, n: "Siglo XIX"},
+            {id: 41, n: "Siglo XX"},
+            {id: 44, n: "Ley de Policía del País Vasco"},
+            {id: 45, n: "Ley de Seguridad Pública de Euskadi"},
+            {id: 49, n: "Comisiones de coordinación policial"}
+        ];
+
+        let examenActual = [];
+        let historialRespuestas = [];
+        let indicePregunta = 0;
+        let intervaloTiempo;
+        let segundosRestantes = 0;
+        let corregida = false;
+
+        // Generar botones de temas
+        const listaTemas = document.getElementById('lista-temas-dinamica');
+        temasInfo.forEach(tema => {
+            listaTemas.innerHTML += `
+                <div class="tema-card">
+                    <h4>Tema ${tema.id}. ${tema.n}</h4>
+                    <button class="btn-accion btn-resumen" onclick="verResumen(${tema.id}, '${tema.n}')">Ver Resumen</button>
+                    <button class="btn-accion btn-test-tema" onclick="comenzarExamen(${tema.id})">Hacer Test (${banco.filter(p=>p.t===tema.id).length}p)</button>
+                </div>
+            `;
+        });
+
+        function seccion(id) {
+            ['teoria', 'psicos', 'simulacro'].forEach(s => document.getElementById(s).style.display = (s===id ? 'block' : 'none'));
+            document.getElementById('visor-test').style.display = 'none';
+            clearInterval(intervaloTiempo);
+        }
+
+        function verResumen(id, titulo) {
+            clearInterval(intervaloTiempo);
+            document.getElementById('test-tiempo').style.display = 'none';
+            document.getElementById('visor-test').style.display = 'block';
+            document.getElementById('test-contenido').style.display = 'none';
+            document.getElementById('test-resultados').style.display = 'none';
+            document.getElementById('resumen-texto').style.display = 'block';
+            document.getElementById('test-titulo').innerText = "Resumen Tema " + id;
+            document.getElementById('test-progreso').innerText = "";
+            
+            let texto = id == 40 ? "<b>Siglo XIX:</b> Guerras carlistas, General Concha y Fueros." : "Contenido de estudio para el Tema " + id;
+            document.getElementById('resumen-texto').innerHTML = texto;
+            document.getElementById('visor-test').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function comenzarExamen(tipo) {
+            clearInterval(intervaloTiempo);
+
+            let filtradas = (tipo === 'general') ? [...banco] : banco.filter(p => p.t === tipo);
+            filtradas.sort(() => Math.random() - 0.5);
+            
+            let cantidad = (tipo === 'general') ? 45 : 20;
+            examenActual = filtradas.slice(0, cantidad);
+            indicePregunta = 0;
+            historialRespuestas = [];
+
+            if(examenActual.length === 0) { alert("Aún no hay preguntas para este tema."); return; }
+
+            document.getElementById('visor-test').style.display = 'block';
+            document.getElementById('resumen-texto').style.display = 'none';
+            document.getElementById('test-resultados').style.display = 'none';
+            document.getElementById('test-contenido').style.display = 'block';
+            document.getElementById('test-titulo').innerText = (tipo === 'general') ? "Simulacro General" : "Test de Tema " + tipo;
+            
+            if(tipo === 'general') { seccion('teoria'); }
+            
+            segundosRestantes = 1200; // 20 min
+            document.getElementById('test-tiempo').style.display = 'block';
+            actualizarRelojDisplay();
+            
+            intervaloTiempo = setInterval(() => {
+                segundosRestantes--;
+                actualizarRelojDisplay();
+                if(segundosRestantes <= 0) {
+                    clearInterval(intervaloTiempo);
+                    finalizarExamenEstructural();
+                }
+            }, 1000);
+
+            renderPregunta();
+            document.getElementById('visor-test').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function actualizarRelojDisplay() {
+            let min = Math.floor(segundosRestantes / 60);
+            let seg = segundosRestantes % 60;
+            document.getElementById('test-tiempo').innerText = `⏳ ${min}:${seg < 10 ? '0' : ''}${seg}`;
+        }
+
+        function renderPregunta() {
+            corregida = false;
+            
+            let p = examenActual[indicePregunta];
+            document.getElementById('test-progreso').innerText = `Pregunta ${indicePregunta + 1} de ${examenActual.length}`;
+            document.getElementById('pregunta-texto').innerText = p.q;
+            
+            let html = "";
+            p.a.forEach((opt, i) => {
+                html += `<div class="opcion" id="opt-${i}" onclick="verificarClic(${i})">${opt}</div>`;
+            });
+            document.getElementById('opciones-lista').innerHTML = html;
+            
+            const btn = document.getElementById('btn-navegacion');
+            btn.innerText = "Selecciona una respuesta";
+            btn.className = "btn-rojo btn-disabled";
+            btn.disabled = true;
+        }
+
+        function verificarClic(seleccionadaIdx) {
+            if (corregida) return;
+            
+            corregida = true;
+            let p = examenActual[indicePregunta];
+            let correctaIdx = p.c;
+            
+            historialRespuestas.push({
+                pregunta: p.q,
+                opciones: p.a,
+                elegida: seleccionadaIdx,
+                correcta: correctaIdx
+            });
+            
+            document.getElementById(`opt-${correctaIdx}`).classList.add('correcta-verde');
+            
+            if (seleccionadaIdx !== correctaIdx) {
+                document.getElementById(`opt-${seleccionadaIdx}`).classList.add('incorrecta-roja');
+            }
+            
+            const btn = document.getElementById('btn-navegacion');
+            btn.innerText = "Siguiente Pregunta ➡️";
+            btn.className = "btn-rojo";
+            btn.disabled = false;
+        }
+
+        function siguientePregunta() {
+            if(indicePregunta < examenActual.length - 1) {
+                indicePregunta++;
+                renderPregunta();
+            } else {
+                finalizarExamenEstructural();
+            }
+        }
+
+        function finalizarExamenEstructural() {
+            clearInterval(intervaloTiempo);
+            document.getElementById('test-tiempo').style.display = 'none';
+            document.getElementById('test-contenido').style.display = 'none';
+            
+            let panelResultados = document.getElementById('test-resultados');
+            panelResultados.style.display = 'block';
+            
+            let aciertos = 0;
+            let fallos = 0;
+            
+            historialRespuestas.forEach(r => {
+                if(r.elegida === r.correcta) aciertos++;
+                else fallos++;
+            });
+            
+            let notaOpe = (aciertos - (fallos * 0.33)).toFixed(2);
+            if (notaOpe < 0) notaOpe = 0;
+
+            let htmlResultados = `
+                <div class="caja-resultados">
+                    <h3>📊 Balance del Examen</h3>
+                    <p style="font-size:18px; margin:8px 0;">✅ Respuestas Acertadas: <b style="color:#22c55e;">${aciertos}</b></p>
+                    <p style="font-size:18px; margin:8px 0;">❌ Respuestas Falladas: <b style="color:#ef4444;">${fallos}</b></p>
+                    <p style="font-size:19px; margin:15px 0 0 0; padding-top:10px; border-top:1px dashed #ccc;">
+                        🎯 Nota Estimada OPE: <b>${notaOpe} pts</b> (Penalización de -0.33 por fallo aplicada)
+                    </p>
+                </div>
+                
+                <h3 style="color:#1a1a1a; margin-top:30px;">🔍 Revisión de Fallos y Respuestas</h3>
+                <div id="lista-revision">
+            `;
+
+            historialRespuestas.forEach((r, idx) => {
+                let esCorrecto = r.elegida === r.correcta;
+                
+                htmlResultados += `
+                    <div class="item-revision" style="border-left: 5px solid ${esCorrecto ? '#22c55e' : '#ef4444'};">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                            <strong>Pregunta ${idx + 1}</strong>
+                            <span class="${esCorrecto ? 'badge-correcta' : 'badge-incorrecta'}">
+                                ${esCorrecto ? '¡ACERTADA!' : 'FALLADA'}
+                            </span>
+                        </div>
+                        <p style="margin:5px 0 10px 0; font-weight:600;">${r.pregunta}</p>
+                        <p style="margin:4px 0; font-size:14px;">👉 Tu respuesta: <span style="color:${esCorrecto ? '#22c55e' : '#ef4444'}; font-weight:bold;">${r.opciones[r.elegida]}</span></p>
+                        ${!esCorrecto ? `<p style="margin:4px 0; font-size:14px; color:#22c55e;">✔ Respuesta correcta: <b>${r.opciones[r.correcta]}</b></p>` : ''}
+                    </div>
+                `;
+            });
+
+            htmlResultados += `
+                </div>
+                <button class="btn-rojo" style="margin-top:20px; padding:12px 30px;" onclick="cerrarResultados()">Volver al Panel de Temas</button>
+            `;
+            
+            panelResultados.innerHTML = htmlResultados;
+            panelResultados.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function cerrarResultados() {
+            document.getElementById('visor-test').style.display = 'none';
+            document.getElementById('test-resultados').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
