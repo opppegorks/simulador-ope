@@ -1283,7 +1283,7 @@ if (!p.a) {
             document.getElementById('visor-test').scrollIntoView({ behavior: 'smooth' });
         }
 
-        function comenzarExamen(tipo) {
+        
     clearInterval(intervaloTiempo);
 
     document.getElementById('teoria').style.display = 'block';
@@ -1369,25 +1369,64 @@ document.getElementById('test-tiempo').style.display = 'block';            actua
             });
             
             document.getElementById(`opt-${correctaIdx}`).classList.add('correcta-verde');
-            
-            if (seleccionadaIdx !== correctaIdx) {
-                document.getElementById(`opt-${seleccionadaIdx}`).classList.add('incorrecta-roja');
-            }
-            
-            const btn = document.getElementById('btn-navegacion');
-            btn.innerText = "Siguiente Pregunta ➡️";
-            btn.className = "btn-rojo";
-            btn.disabled = false;
-        }
 
-        function siguientePregunta() {
-            if(indicePregunta < examenActual.length - 1) {
-                indicePregunta++;
-                renderPregunta();
-            } else {
-                finalizarExamenEstructural();
-            }
+           function comenzarExamen(tipo) {
+    clearInterval(intervaloTiempo);
+
+    document.getElementById('teoria').style.display = 'block';
+    document.getElementById('psicos').style.display = 'none';
+    document.getElementById('simulacro').style.display = 'none';
+
+    let filtradas;
+
+    if (tipo === 'general') {
+        filtradas = banco.filter(p => typeof p.t === 'number');
+    } else {
+        filtradas = banco.filter(p => p.t === tipo);
+    }
+
+    filtradas.sort(() => Math.random() - 0.5);
+
+    let cantidad = (tipo === 'general') ? 45 : 20;
+    examenActual = filtradas.slice(0, cantidad);
+    indicePregunta = 0;
+    historialRespuestas = [];
+
+    if (examenActual.length === 0) {
+        console.log(tipo, filtradas.length);
+        alert("Aún no hay preguntas para este apartado.");
+        return;
+    }
+
+    document.getElementById('visor-test').style.display = 'block';
+    document.getElementById('resumen-texto').style.display = 'none';
+    document.getElementById('test-resultados').style.display = 'none';
+    document.getElementById('test-contenido').style.display = 'block';
+
+    document.getElementById('test-titulo').innerText =
+        (tipo === 'general') ? "Simulacro General" :
+        (tipo === 'psico_analogias') ? "Test de Analogías" :
+        (tipo === 'psico_antonimos') ? "Test de Antónimos" :
+        (tipo === 'psico_refranes') ? "Test de Refranes" :
+        "Test de Tema " + tipo;
+
+    segundosRestantes = (tipo === 'general') ? 2700 : 1200;
+    document.getElementById('test-tiempo').style.display = 'block';
+    actualizarRelojDisplay();
+
+    intervaloTiempo = setInterval(() => {
+        segundosRestantes--;
+        actualizarRelojDisplay();
+
+        if (segundosRestantes <= 0) {
+            clearInterval(intervaloTiempo);
+            finalizarExamenEstructural();
         }
+    }, 1000);
+
+    renderPregunta();
+    document.getElementById('visor-test').scrollIntoView({ behavior: 'smooth' });
+
 
         function finalizarExamenEstructural() {
             clearInterval(intervaloTiempo);
