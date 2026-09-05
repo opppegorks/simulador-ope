@@ -80,6 +80,7 @@
     <button onclick="seccion('teoria')">📚 Teoría y Tests</button>
     <button onclick="seccion('psicos')">🧩 Psicotécnicos</button>
     <button onclick="comenzarExamen('general')">🚀 Simulacro General</button>
+    <button onclick="comenzarSimulacroEquilibrado()">⚖️ Simulacro Equilibrado</button>
 </nav>
  <main class="zona-trabajo">
             <section id="teoria">
@@ -179,6 +180,224 @@ onclick="comenzarExamen('psico_refranes')"
     let relojSimulacroInterval = null;
     let tiempoSimulacroRestante = 45 * 60;
 
+function seleccionarPreguntasEquilibradas() {
+
+    // Solo preguntas de teoría
+    const preguntasTeoria = banco.filter(p => typeof p.t === 'number');
+
+    // Agrupar por tema
+    const porTema = {};
+
+    preguntasTeoria.forEach(p => {
+        if (!porTema[p.t]) {
+            porTema[p.t] = [];
+        }
+
+        porTema[p.t].push(p);
+    });
+
+    // Temas que actualmente tienen preguntas
+    let temas = Object.keys(porTema);
+
+    // Mezclamos los temas
+    temas.sort(() => Math.random() - 0.5);
+
+    const seleccionadas = [];
+
+    // -----------------------------
+    // 40 PREGUNTAS PRINCIPALES
+    // -----------------------------
+
+    let temasPrincipales = [];
+
+    if (temas.length >= 40) {
+
+        // Si existen 40 o más temas,
+        // escogemos 40 temas diferentes
+        temasPrincipales = temas.slice(0, 40);
+
+        temasPrincipales.forEach(tema => {
+
+            const preguntas = porTema[tema];
+
+            const aleatoria =
+                preguntas[Math.floor(Math.random() * preguntas.length)];
+
+            seleccionadas.push(aleatoria);
+
+        });
+
+    } else {
+
+        /*
+        Si todavía tienes menos de 40 temas cargados,
+        primero sacamos una pregunta de cada tema.
+        */
+
+        temas.forEach(tema => {
+
+            const preguntas = porTema[tema];
+
+            const aleatoria =
+                preguntas[Math.floor(Math.random() * preguntas.length)];
+
+            seleccionadas.push(aleatoria);
+
+        });
+
+        /*
+        Después completamos hasta llegar a 40,
+        repartiendo entre los temas existentes.
+        */
+
+        while (seleccionadas.length < 40) {
+
+            const tema =
+                temas[Math.floor(Math.random() * temas.length)];
+
+            const preguntas = porTema[tema];
+
+            const posibles = preguntas.filter(
+                p => !seleccionadas.includes(p)
+            );
+
+            if (posibles.length > 0) {
+
+                const aleatoria =
+                    posibles[Math.floor(Math.random() * posibles.length)];
+
+                seleccionadas.push(aleatoria);
+            }
+        }
+    }
+
+    // -----------------------------
+    // 5 PREGUNTAS DE RESERVA
+    // -----------------------------
+
+    let temasReserva;
+
+    if (temas.length > 40) {
+
+        // Intentamos que las reservas sean
+        // de temas que NO han salido todavía
+        temasReserva = temas.filter(
+            t => !temasPrincipales.includes(t)
+        );
+
+    } else {
+
+        temasReserva = [...temas];
+    }
+
+    temasReserva.sort(() => Math.random() - 0.5);
+
+    let reservas = [];
+
+    for (const tema of temasReserva) {
+
+        if (reservas.length >= 5) break;
+
+        const preguntas = porTema[tema];
+
+        const posibles = preguntas.filter(
+            p =>
+                !seleccionadas.includes(p) &&
+                !reservas.includes(p)
+        );
+
+        if (posibles.length > 0) {
+
+            reservas.push(
+                posibles[Math.floor(Math.random() * posibles.length)]
+            );
+        }
+    }
+
+    // Si no hemos llegado a 5 reservas,
+    // completamos con cualquier tema
+    while (reservas.length < 5) {
+
+        const tema =
+            temas[Math.floor(Math.random() * temas.length)];
+
+        const preguntas = porTema[tema];
+
+        const posibles = preguntas.filter(
+            p =>
+                !seleccionadas.includes(p) &&
+                !reservas.includes(p)
+        );
+
+        if (posibles.length > 0) {
+
+            reservas.push(
+                posibles[Math.floor(Math.random() * posibles.length)]
+            );
+        }
+    }
+
+    return [...seleccionadas, ...reservas];
+}    
+
+function comenzarSimulacroEquilibrado() {
+
+    document.getElementById('teoria').style.display = 'block';
+    document.getElementById('psicos').style.display = 'none';
+    document.getElementById('simulacro').style.display = 'none';
+
+    document.getElementById('visor-test').style.display = 'block';
+    document.getElementById('resumen-texto').style.display = 'none';
+    document.getElementById('test-contenido').style.display = 'block';
+    document.getElementById('test-resultados').style.display = 'none';
+
+    // AQUÍ ESTÁ LA DIFERENCIA
+    window.preguntasActuales = seleccionarPreguntasEquilibradas();
+
+    window.indicePregunta = 0;
+    window.respuestasUsuario = [];
+
+    document.getElementById('test-titulo').innerText =
+        "⚖️ Simulacro Equilibrado";
+
+    document.getElementById('test-tiempo').style.display = 'block';
+
+    tiempoSimulacroRestante = 45 * 60;
+
+    if (relojSimulacroInterval) {
+        clearInterval(relojSimulacroInterval);
+    }
+
+    relojSimulacroInterval = setInterval(function() {
+
+        tiempoSimulacroRestante--;
+
+        let minutos =
+            Math.floor(tiempoSimulacroRestante / 60);
+
+        let segundos =
+            tiempoSimulacroRestante % 60;
+
+        document.getElementById('test-tiempo').innerText =
+            "⏳ " +
+            String(minutos).padStart(2, '0') +
+            ":" +
+            String(segundos).padStart(2, '0');
+
+        if (tiempoSimulacroRestante <= 0) {
+
+            clearInterval(relojSimulacroInterval);
+
+            finalizarSimulacroAutonomo();
+        }
+
+    }, 1000);
+
+    renderizarPreguntaSimulacro();
+
+    document.getElementById('visor-test')
+        .scrollIntoView({ behavior: 'smooth' });
+}
 
 function comenzarSimulacroGlobal() {
 
