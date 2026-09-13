@@ -522,10 +522,14 @@ if (!p.a) {
         // Aplicar estilos CSS correspondientes
         if (indiceSeleccionado === p.c) {
             elementoSeleccionado.classList.add('correcta-verde');
-        } else {
-            elementoSeleccionado.classList.add('incorrecta-roja');
-            if(divsOpciones[p.c]) divsOpciones[p.c].classList.add('correcta-verde');
-        }
+       } else {
+    elementoSeleccionado.classList.add('incorrecta-roja');
+    registrarFallo(p);
+
+    if (divsOpciones[p.c]) {
+        divsOpciones[p.c].classList.add('correcta-verde');
+    }
+}
 
         // Activar el botón de navegación inferior
         const btnNavegacion = document.getElementById('btn-navegacion');
