@@ -87,6 +87,11 @@
                 <div class="tarjeta">
                     <h2>Temas OPE</h2>
                     <p>Visualiza el resumen o realiza un test aleatorio de 20 preguntas (Tiempo límite: 20 minutos. Corrección instantánea al hacer clic).</p>
+                    <button id="btn-test-fallos" class="btn-rojo"
+        style="padding:12px 20px; margin:10px 0 5px 0;"
+        onclick="comenzarExamen('mas_falladas')">
+    🔥 Test de las preguntas que más fallo
+</button>
                     <div class="grid-temas" id="lista-temas-dinamica">
                         </div>
 
@@ -2101,6 +2106,53 @@ if (!p.a) {
         let intervaloTiempo;
         let segundosRestantes = 0;
         let corregida = false;
+        const CLAVE_FALLOS = 'ope_fallos_por_pregunta';
+
+function obtenerFallosGuardados() {
+    try {
+        return JSON.parse(localStorage.getItem(CLAVE_FALLOS)) || {};
+    } catch (error) {
+        return {};
+    }
+}
+
+function registrarFallo(pregunta) {
+    const fallos = obtenerFallosGuardados();
+
+    fallos[pregunta.q] = (fallos[pregunta.q] || 0) + 1;
+
+    localStorage.setItem(
+        CLAVE_FALLOS,
+        JSON.stringify(fallos)
+    );
+
+    actualizarBotonFallos();
+}
+
+function actualizarBotonFallos() {
+    const boton = document.getElementById('btn-test-fallos');
+
+    if (!boton) return;
+
+    const total = Object.keys(obtenerFallosGuardados()).length;
+
+    boton.innerText =
+        `🔥 Test de las preguntas que más fallo (${total})`;
+}
+
+function seleccionarPreguntasMasFalladas() {
+    const fallos = obtenerFallosGuardados();
+
+    return banco
+        .filter(p =>
+            typeof p.t === 'number' &&
+            fallos[p.q] > 0
+        )
+        .sort((a, b) =>
+            fallos[b.q] - fallos[a.q]
+        )
+        .slice(0, 20);
+}
 
         // Generar botones de temas
         const listaTemas = document.getElementById('lista-temas-dinamica');
@@ -2113,6 +2165,7 @@ if (!p.a) {
                 </div>
             `;
         });
+        actualizarBotonFallos();
 
         function seccion(id) {
             ['teoria', 'psicos', 'simulacro'].forEach(s => document.getElementById(s).style.display = (s===id ? 'block' : 'none'));
@@ -2146,10 +2199,15 @@ if (!p.a) {
 
 if (tipo === 'general') {
     filtradas = banco.filter(p => typeof p.t === 'number');
+} else if (tipo === 'mas_falladas') {
+    filtradas = seleccionarPreguntasMasFalladas();
 } else {
     filtradas = banco.filter(p => p.t === tipo);
-}            
-filtradas.sort(() => Math.random() - 0.5);
+}
+
+if (tipo !== 'mas_falladas') {
+    filtradas.sort(() => Math.random() - 0.5);
+}
             
             let cantidad = (tipo === 'general') ? 45 : 20;
             examenActual = filtradas.slice(0, cantidad);
@@ -2162,8 +2220,12 @@ filtradas.sort(() => Math.random() - 0.5);
             document.getElementById('resumen-texto').style.display = 'none';
             document.getElementById('test-resultados').style.display = 'none';
             document.getElementById('test-contenido').style.display = 'block';
-            document.getElementById('test-titulo').innerText = (tipo === 'general') ? "Simulacro General" : "Test de Tema " + tipo;
-            
+            document.getElementById('test-titulo').innerText =
+            tipo === 'general'
+            ? "Simulacro General"
+             : tipo === 'mas_falladas'
+            ? "🔥 Preguntas que más fallo"
+            : "Test de Tema " + tipo;            
             
 segundosRestantes = (tipo === 'general') ? 2700 : 1200; // 45 min simulacro / 20 min test
 document.getElementById('test-tiempo').style.display = 'block';            actualizarRelojDisplay();
@@ -2223,8 +2285,9 @@ document.getElementById('test-tiempo').style.display = 'block';            actua
             document.getElementById(`opt-${correctaIdx}`).classList.add('correcta-verde');
             
             if (seleccionadaIdx !== correctaIdx) {
-                document.getElementById(`opt-${seleccionadaIdx}`).classList.add('incorrecta-roja');
-            }
+    document.getElementById(`opt-${seleccionadaIdx}`).classList.add('incorrecta-roja');
+    registrarFallo(p);
+}
             
             const btn = document.getElementById('btn-navegacion');
             btn.innerText = "Siguiente Pregunta ➡️";
