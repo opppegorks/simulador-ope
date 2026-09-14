@@ -2413,100 +2413,215 @@ document.getElementById('test-tiempo').style.display = 'block';            actua
             }
         }
 
-        function finalizarExamenEstructural() {
-            clearInterval(intervaloTiempo);
-            document.getElementById('test-tiempo').style.display = 'none';
-            document.getElementById('test-contenido').style.display = 'none';
-            
-            let panelResultados = document.getElementById('test-resultados');
-            panelResultados.style.display = 'block';
-            
-            // Si tiene 45 preguntas, es el simulacro general
-const esSimulacroGeneral = examenActual.length === 45;
+ function finalizarExamenEstructural() {
+    clearInterval(intervaloTiempo);
 
-// En el simulacro solo cuentan las primeras 40
-const respuestasEvaluables = esSimulacroGeneral
-    ? historialRespuestas.slice(0, 40)
-    : historialRespuestas;
+    document.getElementById('test-tiempo').style.display = 'none';
+    document.getElementById('test-contenido').style.display = 'none';
 
-// Las preguntas 41-45 son de reserva
-const respuestasReserva = esSimulacroGeneral
-    ? historialRespuestas.slice(40, 45)
-    : [];
+    const panelResultados =
+        document.getElementById('test-resultados');
 
-let aciertos = respuestasEvaluables.filter(
-    r => r.elegida === r.correcta
-).length;
+    panelResultados.style.display = 'block';
 
-let fallos = respuestasEvaluables.filter(
-    r => r.elegida !== r.correcta
-).length;
+    const esSimulacroGeneral =
+        examenActual.length === 45;
 
-let aciertosReserva = respuestasReserva.filter(
-    r => r.elegida === r.correcta
-).length;
+    // Solo cuentan para la nota las preguntas 1-40
+    const respuestasEvaluables = esSimulacroGeneral
+        ? historialRespuestas.slice(0, 40)
+        : historialRespuestas;
 
-let fallosReserva = respuestasReserva.filter(
-    r => r.elegida !== r.correcta
-).length;
+    // Las preguntas 41-45 son de reserva
+    const respuestasReserva = esSimulacroGeneral
+        ? historialRespuestas.slice(40, 45)
+        : [];
 
-// Cada fallo resta 0,33 puntos
-let puntuacionNeta = aciertos - (fallos * 0.33);
+    const aciertos = respuestasEvaluables.filter(
+        r => r.elegida === r.correcta
+    ).length;
 
-if (puntuacionNeta < 0) {
-    puntuacionNeta = 0;
-}
+    const fallos = respuestasEvaluables.filter(
+        r => r.elegida !== r.correcta
+    ).length;
 
-// Nota sobre 10
-const totalEvaluable = esSimulacroGeneral
-    ? 40
-    : respuestasEvaluables.length;
+    const aciertosReserva = respuestasReserva.filter(
+        r => r.elegida === r.correcta
+    ).length;
 
-const notaSobreDiez =
-    totalEvaluable > 0
+    const fallosReserva = respuestasReserva.filter(
+        r => r.elegida !== r.correcta
+    ).length;
+
+    // Cada fallo resta 0,33
+    let puntuacionNeta =
+        aciertos - (fallos * 0.33);
+
+    if (puntuacionNeta < 0) {
+        puntuacionNeta = 0;
+    }
+
+    const totalEvaluable = esSimulacroGeneral
+        ? 40
+        : respuestasEvaluables.length;
+
+    const notaSobreDiez = totalEvaluable > 0
         ? (puntuacionNeta / totalEvaluable) * 10
         : 0;
 
-            let htmlResultados = `
-                <div class="caja-resultados">
-                    <h3>📊 Balance del Examen</h3>
-                    <p style="font-size:18px; margin:8px 0;">✅ Respuestas Acertadas: <b style="color:#22c55e;">${aciertos}</b></p>
-                    <p style="font-size:18px; margin:8px 0;">❌ Respuestas Falladas: <b style="color:#ef4444;">${fallos}</b></p>
-                    <p style="font-size:19px; margin:15px 0 0 0; padding-top:10px; border-top:1px dashed #ccc;">
-🎯 Nota Estimada OPE: <b>${notaSobreDiez.toFixed(2)} sobre 10</b> (Penalización de -0,33 por fallo aplicada)                    </p>
+    let htmlResultados = `
+        <div class="caja-resultados">
+            <h3>📊 Resultado del examen</h3>
+
+            <p style="font-size:18px;">
+                Preguntas que cuentan:
+                <b>${totalEvaluable}</b>
+            </p>
+
+            <p style="font-size:18px;">
+                ✅ Aciertos:
+                <b style="color:#22c55e;">
+                    ${aciertos}
+                </b>
+            </p>
+
+            <p style="font-size:18px;">
+                ❌ Fallos:
+                <b style="color:#ef4444;">
+                    ${fallos}
+                </b>
+            </p>
+
+            <p style="font-size:18px;">
+                🎯 Puntuación neta:
+                <b>${puntuacionNeta.toFixed(2)} de ${totalEvaluable}</b>
+            </p>
+
+            <p style="font-size:22px; color:#c11b2b;">
+                Nota:
+                <b>${notaSobreDiez.toFixed(2)} sobre 10</b>
+            </p>
+
+            <small>
+                Cada respuesta incorrecta resta 0,33 puntos.
+            </small>
+        </div>
+    `;
+
+    if (esSimulacroGeneral) {
+        htmlResultados += `
+            <div class="caja-resultados">
+                <h3>🛟 Preguntas de reserva</h3>
+
+                <p style="color:#22c55e;">
+                    ✅ Aciertos de reserva:
+                    <b>${aciertosReserva}</b>
+                </p>
+
+                <p style="color:#ef4444;">
+                    ❌ Fallos de reserva:
+                    <b>${fallosReserva}</b>
+                </p>
+
+                <small>
+                    Las preguntas 41-45 no cuentan para la nota.
+                </small>
+            </div>
+        `;
+    }
+
+    htmlResultados += `
+        <h3 style="margin-top:30px;">
+            🔍 Revisión de las respuestas
+        </h3>
+
+        <div id="lista-revision">
+    `;
+
+    historialRespuestas.forEach((r, idx) => {
+        const esCorrecto =
+            r.elegida === r.correcta;
+
+        const esReserva =
+            esSimulacroGeneral && idx >= 40;
+
+        htmlResultados += `
+            <div class="item-revision"
+                style="border-left:5px solid ${
+                    esCorrecto ? '#22c55e' : '#ef4444'
+                };">
+
+                <div style="
+                    display:flex;
+                    justify-content:space-between;
+                    align-items:center;
+                    margin-bottom:10px;
+                ">
+                    <strong>
+                        Pregunta ${idx + 1}
+                        ${esReserva ? ' (RESERVA)' : ''}
+                    </strong>
+
+                    <span class="${
+                        esCorrecto
+                            ? 'badge-correcta'
+                            : 'badge-incorrecta'
+                    }">
+                        ${
+                            esCorrecto
+                                ? '¡ACERTADA!'
+                                : 'FALLADA'
+                        }
+                    </span>
                 </div>
-                
-                <h3 style="color:#1a1a1a; margin-top:30px;">🔍 Revisión de Fallos y Respuestas</h3>
-                <div id="lista-revision">
-            `;
 
-            historialRespuestas.forEach((r, idx) => {
-                let esCorrecto = r.elegida === r.correcta;
-                
-                htmlResultados += `
-                    <div class="item-revision" style="border-left: 5px solid ${esCorrecto ? '#22c55e' : '#ef4444'};">
-                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-                            <strong>Pregunta ${idx + 1}</strong>
-                            <span class="${esCorrecto ? 'badge-correcta' : 'badge-incorrecta'}">
-                                ${esCorrecto ? '¡ACERTADA!' : 'FALLADA'}
-                            </span>
-                        </div>
-                        <p style="margin:5px 0 10px 0; font-weight:600;">${r.pregunta}</p>
-                        <p style="margin:4px 0; font-size:14px;">👉 Tu respuesta: <span style="color:${esCorrecto ? '#22c55e' : '#ef4444'}; font-weight:bold;">${r.opciones[r.elegida]}</span></p>
-                        ${!esCorrecto ? `<p style="margin:4px 0; font-size:14px; color:#22c55e;">✔ Respuesta correcta: <b>${r.opciones[r.correcta]}</b></p>` : ''}
-                    </div>
-                `;
-            });
+                <p style="font-weight:600;">
+                    ${r.pregunta}
+                </p>
 
-            htmlResultados += `
-                </div>
-                <button class="btn-rojo" style="margin-top:20px; padding:12px 30px;" onclick="cerrarResultados()">Volver al Panel de Temas</button>
-            `;
-            
-            panelResultados.innerHTML = htmlResultados;
-            panelResultados.scrollIntoView({ behavior: 'smooth' });
-        }
+                <p>
+                    👉 Tu respuesta:
+                    <b style="color:${
+                        esCorrecto
+                            ? '#22c55e'
+                            : '#ef4444'
+                    };">
+                        ${r.opciones[r.elegida]}
+                    </b>
+                </p>
 
+                ${
+                    !esCorrecto
+                        ? `
+                        <p style="color:#22c55e;">
+                            ✔ Respuesta correcta:
+                            <b>${r.opciones[r.correcta]}</b>
+                        </p>
+                        `
+                        : ''
+                }
+            </div>
+        `;
+    });
+
+    htmlResultados += `
+        </div>
+
+        <button
+            class="btn-rojo"
+            style="margin-top:20px; padding:12px 30px;"
+            onclick="cerrarResultados()">
+
+            Volver al Panel de Temas
+        </button>
+    `;
+
+    panelResultados.innerHTML = htmlResultados;
+
+    panelResultados.scrollIntoView({
+        behavior: 'smooth'
+    });
+}
         function cerrarResultados() {
             document.getElementById('visor-test').style.display = 'none';
             document.getElementById('test-resultados').style.display = 'none';
