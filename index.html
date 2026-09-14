@@ -556,30 +556,120 @@ if (!p.a) {
         }
     }
 
-    function finalizarSimulacroAutonomo() {
-        clearInterval(relojSimulacroInterval);
-        if(document.getElementById('test-tiempo')) document.getElementById('test-tiempo').style.display = 'none';
-        if(document.getElementById('test-contenido')) document.getElementById('test-contenido').style.display = 'none';
-        
-        const testResultados = document.getElementById('test-resultados');
-        if(testResultados) {
-            testResultados.style.display = 'block';
-            
-            let correctas = window.respuestasUsuario.filter(r => r.respondida === r.correcta).length;
-            let falladas = window.respuestasUsuario.length - correctas;
-            
-            testResultados.innerHTML = `
-                <div class="tarjeta" style="text-align:center;">
-                    <h3>Fin del Simulacro</h3>
-                    <p style="font-size: 1.2rem;">Preguntas respondidas: <strong>${window.respuestasUsuario.length}</strong></p>
-                    <p style="color: green; font-size: 1.1rem;">Aciertos: <strong>${correctas}</strong></p>
-                    <p style="color: red; font-size: 1.1rem;">Fallos: <strong>${falladas}</strong></p>
-                    <button onclick="location.reload()" style="margin-top:15px; padding:10px 20px; background:#1a1a1a; color:white; border:none; border-radius:5px; cursor:pointer;">Volver al Inicio</button>
-                </div>
-            `;
-        }
+   function finalizarSimulacroAutonomo() {
+    clearInterval(relojSimulacroInterval);
+
+    document.getElementById('test-tiempo').style.display = 'none';
+    document.getElementById('test-contenido').style.display = 'none';
+
+    const testResultados = document.getElementById('test-resultados');
+    testResultados.style.display = 'block';
+
+    // Solo cuentan las primeras 40
+    const respuestasEvaluables =
+        window.respuestasUsuario.slice(0, 40);
+
+    // Las preguntas 41-45 son de reserva
+    const respuestasReserva =
+        window.respuestasUsuario.slice(40, 45);
+
+    const correctas = respuestasEvaluables.filter(
+        r => r.respondida === r.correcta
+    ).length;
+
+    const falladas = respuestasEvaluables.filter(
+        r => r.respondida !== r.correcta
+    ).length;
+
+    const correctasReserva = respuestasReserva.filter(
+        r => r.respondida === r.correcta
+    ).length;
+
+    const falladasReserva = respuestasReserva.filter(
+        r => r.respondida !== r.correcta
+    ).length;
+
+    // Cada fallo resta 0,33
+    let puntuacionNeta = correctas - (falladas * 0.33);
+
+    if (puntuacionNeta < 0) {
+        puntuacionNeta = 0;
     }
-</script>
+
+    // Conversión de la puntuación sobre 40 a una nota sobre 10
+    const notaSobreDiez = (puntuacionNeta / 40) * 10;
+
+    testResultados.innerHTML = `
+        <div class="tarjeta" style="text-align:center;">
+            <h3>Fin del Simulacro</h3>
+
+            <p style="font-size:1.2rem;">
+                Preguntas evaluables: <strong>40</strong>
+            </p>
+
+            <p style="color:green; font-size:1.1rem;">
+                Aciertos: <strong>${correctas}</strong>
+            </p>
+
+            <p style="color:red; font-size:1.1rem;">
+                Fallos: <strong>${falladas}</strong>
+            </p>
+
+            <div style="
+                margin-top:20px;
+                padding:15px;
+                background:#f1f5f9;
+                border-radius:10px;
+            ">
+                <p style="font-size:1.2rem; margin:5px;">
+                    Puntuación neta:
+                    <strong>${puntuacionNeta.toFixed(2)} de 40</strong>
+                </p>
+
+                <p style="font-size:1.5rem; margin:10px; color:#c11b2b;">
+                    Nota del simulacro:
+                    <strong>${notaSobreDiez.toFixed(2)} sobre 10</strong>
+                </p>
+
+                <small>
+                    Cada respuesta incorrecta resta 0,33 puntos.
+                </small>
+            </div>
+
+            <div style="
+                margin-top:20px;
+                padding-top:15px;
+                border-top:1px solid #ddd;
+            ">
+                <h4>Preguntas de reserva</h4>
+
+                <p style="color:green;">
+                    Aciertos: <strong>${correctasReserva}</strong>
+                </p>
+
+                <p style="color:red;">
+                    Fallos: <strong>${falladasReserva}</strong>
+                </p>
+
+                <small>
+                    Las cinco preguntas de reserva no cuentan para la nota.
+                </small>
+            </div>
+
+            <button onclick="location.reload()" style="
+                margin-top:20px;
+                padding:10px 20px;
+                background:#1a1a1a;
+                color:white;
+                border:none;
+                border-radius:5px;
+                cursor:pointer;
+            ">
+                Volver al Inicio
+            </button>
+        </div>
+    `;
+}
 
 <script>
         // BANCO DE PREGUNTAS (Tema 15 ampliado con tus 50 preguntas en total)
