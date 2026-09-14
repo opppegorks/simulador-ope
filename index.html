@@ -2420,16 +2420,51 @@ document.getElementById('test-tiempo').style.display = 'block';            actua
             let panelResultados = document.getElementById('test-resultados');
             panelResultados.style.display = 'block';
             
-            let aciertos = 0;
-            let fallos = 0;
-            
-            historialRespuestas.forEach(r => {
-                if(r.elegida === r.correcta) aciertos++;
-                else fallos++;
-            });
-            
-            let notaOpe = (aciertos - (fallos * 0.33)).toFixed(2);
-            if (notaOpe < 0) notaOpe = 0;
+            // Si tiene 45 preguntas, es el simulacro general
+const esSimulacroGeneral = examenActual.length === 45;
+
+// En el simulacro solo cuentan las primeras 40
+const respuestasEvaluables = esSimulacroGeneral
+    ? historialRespuestas.slice(0, 40)
+    : historialRespuestas;
+
+// Las preguntas 41-45 son de reserva
+const respuestasReserva = esSimulacroGeneral
+    ? historialRespuestas.slice(40, 45)
+    : [];
+
+let aciertos = respuestasEvaluables.filter(
+    r => r.elegida === r.correcta
+).length;
+
+let fallos = respuestasEvaluables.filter(
+    r => r.elegida !== r.correcta
+).length;
+
+let aciertosReserva = respuestasReserva.filter(
+    r => r.elegida === r.correcta
+).length;
+
+let fallosReserva = respuestasReserva.filter(
+    r => r.elegida !== r.correcta
+).length;
+
+// Cada fallo resta 0,33 puntos
+let puntuacionNeta = aciertos - (fallos * 0.33);
+
+if (puntuacionNeta < 0) {
+    puntuacionNeta = 0;
+}
+
+// Nota sobre 10
+const totalEvaluable = esSimulacroGeneral
+    ? 40
+    : respuestasEvaluables.length;
+
+const notaSobreDiez =
+    totalEvaluable > 0
+        ? (puntuacionNeta / totalEvaluable) * 10
+        : 0;
 
             let htmlResultados = `
                 <div class="caja-resultados">
