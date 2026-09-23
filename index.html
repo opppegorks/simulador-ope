@@ -655,7 +655,81 @@ if (!p.a) {
                     Las cinco preguntas de reserva no cuentan para la nota.
                 </small>
             </div>
+<h3 style="margin-top:30px;">
+    🔍 Preguntas falladas
+</h3>
 
+${window.respuestasUsuario
+    .map((r, idx) => {
+        const esCorrecto = r.respondida === r.correcta;
+
+        // Solo mostramos las falladas
+        if (esCorrecto) return "";
+
+        const esReserva = idx >= 40;
+
+        const opcionesHTML = r.opciones.map((opcion, i) => {
+            const letra = String.fromCharCode(65 + i);
+
+            let fondo = "#ffffff";
+            let borde = "#d1d5db";
+            let color = "#1f2937";
+            let indicacion = "";
+
+            if (i === r.correcta) {
+                fondo = "#dcfce7";
+                borde = "#22c55e";
+                color = "#15803d";
+                indicacion = " ✅ RESPUESTA CORRECTA";
+            }
+
+            if (i === r.respondida && i !== r.correcta) {
+                fondo = "#fee2e2";
+                borde = "#ef4444";
+                color = "#dc2626";
+                indicacion = " ❌ TU RESPUESTA";
+            }
+
+            return \`
+                <div style="
+                    margin:7px 0;
+                    padding:10px;
+                    text-align:left;
+                    background:\${fondo};
+                    border:2px solid \${borde};
+                    border-radius:7px;
+                    color:\${color};
+                ">
+                    <b>\${letra})</b> \${opcion}
+                    <b>\${indicacion}</b>
+                </div>
+            \`;
+        }).join("");
+
+        return \`
+            <div style="
+                margin:15px 0;
+                padding:15px;
+                text-align:left;
+                border-left:5px solid #ef4444;
+                background:#ffffff;
+                border-radius:8px;
+            ">
+                <strong>
+                    Pregunta \${idx + 1}
+                    \${esReserva ? " (RESERVA)" : ""}
+                </strong>
+
+                <p style="font-weight:600;">
+                    \${r.pregunta}
+                </p>
+
+                \${opcionesHTML}
+            </div>
+        \`;
+    })
+    .join("")}
+    
             <button onclick="location.reload()" style="
                 margin-top:20px;
                 padding:10px 20px;
@@ -2857,70 +2931,90 @@ document.getElementById('test-tiempo').style.display = 'block';            actua
     `;
 
     historialRespuestas.forEach((r, idx) => {
-        const esCorrecto =
-            r.elegida === r.correcta;
+    const esCorrecto = r.elegida === r.correcta;
+    const esReserva = esSimulacroGeneral && idx >= 40;
 
-        const esReserva =
-            esSimulacroGeneral && idx >= 40;
+    // Crear las opciones A, B, C, D...
+    const opcionesHTML = r.opciones.map((opcion, i) => {
+        const letra = String.fromCharCode(65 + i);
 
-        htmlResultados += `
-            <div class="item-revision"
-                style="border-left:5px solid ${
-                    esCorrecto ? '#22c55e' : '#ef4444'
-                };">
+        let fondo = "#ffffff";
+        let borde = "#d1d5db";
+        let color = "#1f2937";
+        let indicacion = "";
 
-                <div style="
-                    display:flex;
-                    justify-content:space-between;
-                    align-items:center;
-                    margin-bottom:10px;
-                ">
-                    <strong>
-                        Pregunta ${idx + 1}
-                        ${esReserva ? ' (RESERVA)' : ''}
-                    </strong>
+        // La respuesta correcta siempre aparece en verde
+        if (i === r.correcta) {
+            fondo = "#dcfce7";
+            borde = "#22c55e";
+            color = "#15803d";
+            indicacion = " ✅ RESPUESTA CORRECTA";
+        }
 
-                    <span class="${
-                        esCorrecto
-                            ? 'badge-correcta'
-                            : 'badge-incorrecta'
-                    }">
-                        ${
-                            esCorrecto
-                                ? '¡ACERTADA!'
-                                : 'FALLADA'
-                        }
-                    </span>
-                </div>
+        // La respuesta elegida incorrectamente aparece en rojo
+        if (i === r.elegida && i !== r.correcta) {
+            fondo = "#fee2e2";
+            borde = "#ef4444";
+            color = "#dc2626";
+            indicacion = " ❌ TU RESPUESTA";
+        }
 
-                <p style="font-weight:600;">
-                    ${r.pregunta}
-                </p>
+        // Si elegiste la correcta
+        if (i === r.elegida && i === r.correcta) {
+            indicacion = " ✅ TU RESPUESTA CORRECTA";
+        }
 
-                <p>
-                    👉 Tu respuesta:
-                    <b style="color:${
-                        esCorrecto
-                            ? '#22c55e'
-                            : '#ef4444'
-                    };">
-                        ${r.opciones[r.elegida]}
-                    </b>
-                </p>
-
-                ${
-                    !esCorrecto
-                        ? `
-                        <p style="color:#22c55e;">
-                            ✔ Respuesta correcta:
-                            <b>${r.opciones[r.correcta]}</b>
-                        </p>
-                        `
-                        : ''
-                }
+        return `
+            <div style="
+                margin:7px 0;
+                padding:10px 12px;
+                background:${fondo};
+                border:2px solid ${borde};
+                border-radius:7px;
+                color:${color};
+            ">
+                <b>${letra})</b> ${opcion}
+                <b>${indicacion}</b>
             </div>
         `;
-    });
+    }).join("");
+
+    htmlResultados += `
+        <div class="item-revision"
+            style="border-left:5px solid ${
+                esCorrecto ? "#22c55e" : "#ef4444"
+            };">
+
+            <div style="
+                display:flex;
+                justify-content:space-between;
+                align-items:center;
+                margin-bottom:10px;
+            ">
+                <strong>
+                    Pregunta ${idx + 1}
+                    ${esReserva ? " (RESERVA)" : ""}
+                </strong>
+
+                <span class="${
+                    esCorrecto
+                        ? "badge-correcta"
+                        : "badge-incorrecta"
+                }">
+                    ${esCorrecto ? "¡ACERTADA!" : "FALLADA"}
+                </span>
+            </div>
+
+            <p style="font-weight:600; font-size:16px;">
+                ${r.pregunta}
+            </p>
+
+            <div style="margin-top:12px;">
+                ${opcionesHTML}
+            </div>
+        </div>
+    `;
+});
 
     htmlResultados += `
         </div>
