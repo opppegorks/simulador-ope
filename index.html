@@ -167,32 +167,49 @@ onclick="comenzarExamen('psico_refranes')"
 
 <section id="personalidad" style="display:none;">
     <div class="tarjeta">
-        <h2>🧠 Test de Personalidad</h2>
 
-        <p>
-            Practica cuestionarios de personalidad similares a los utilizados
-            en los procesos selectivos.
-        </p>
+        <div id="inicio-personalidad">
+            <h2>🧠 Test de Personalidad</h2>
 
-        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(250px, 1fr)); gap:20px; margin-top:20px;">
+            <p>
+                Realiza un test aleatorio de 50 preguntas.
+                Las respuestas se corregirán al finalizar.
+            </p>
 
-            <div style="background:#ffffff; border:2px solid #e0e0e0; border-radius:12px; padding:20px; box-shadow:0 4px 6px rgba(0,0,0,0.05);">
-                <div style="font-size:2rem; margin-bottom:10px;">📝</div>
+            <button class="btn-rojo" onclick="comenzarPersonalidad()">
+                Comenzar test de 50 preguntas
+            </button>
+        </div>
 
-                <h3 style="margin:0 0 8px 0; color:#333;">
-                    Cuestionario de personalidad
+        <div id="visor-personalidad" style="display:none;">
+
+            <div style="display:flex; justify-content:space-between; align-items:center; gap:15px; margin-bottom:20px;">
+                <h3 style="color:#c11b2b; margin:0;">
+                    Test de Personalidad
                 </h3>
 
-                <p style="margin:0 0 15px 0; font-size:0.9rem; color:#666;">
-                    Responde con sinceridad y revisa tu perfil al terminar.
-                </p>
-
-                <button class="btn-rojo" onclick="comenzarPersonalidad()">
-                    Comenzar test
-                </button>
+                <span id="progreso-personalidad"
+                      style="font-weight:bold; background:#eeeeee; padding:6px 12px; border-radius:5px;">
+                </span>
             </div>
 
+            <p id="pregunta-personalidad"
+               style="font-size:19px; font-weight:bold; line-height:1.5;">
+            </p>
+
+            <div id="opciones-personalidad"></div>
+
+            <button id="siguiente-personalidad"
+                    class="btn-rojo btn-disabled"
+                    style="margin-top:20px;"
+                    onclick="siguientePersonalidad()"
+                    disabled>
+                Selecciona una respuesta
+            </button>
         </div>
+
+        <div id="resultado-personalidad" style="display:none;"></div>
+
     </div>
 </section>
 
@@ -1000,6 +1017,204 @@ return `
 {t:"personalidad",q:"Me cuesta mucho ser amable con cierto tipo de personas.",a:["Casi nunca","A veces","Con frecuencia","Casi siempre"],c:1},
 {t:"personalidad",q:"Destaco por mi sinceridad en todas las facetas de mi vida.",a:["Casi nunca","A veces","Con frecuencia","Casi siempre"],c:2},
     ];
+
+    let preguntasPersonalidadActuales = [];
+let indicePersonalidad = 0;
+let respuestasPersonalidad = [];
+
+function comenzarPersonalidad() {
+    if (!Array.isArray(bancoPersonalidad) || bancoPersonalidad.length === 0) {
+        alert("No hay preguntas de personalidad disponibles.");
+        return;
+    }
+
+    preguntasPersonalidadActuales = [...bancoPersonalidad]
+        .sort(() => Math.random() - 0.5)
+        .slice(0, Math.min(50, bancoPersonalidad.length));
+
+    indicePersonalidad = 0;
+    respuestasPersonalidad = [];
+
+    document.getElementById("inicio-personalidad").style.display = "none";
+    document.getElementById("resultado-personalidad").style.display = "none";
+    document.getElementById("visor-personalidad").style.display = "block";
+
+    mostrarPreguntaPersonalidad();
+}
+
+function mostrarPreguntaPersonalidad() {
+    const pregunta =
+        preguntasPersonalidadActuales[indicePersonalidad];
+
+    document.getElementById("progreso-personalidad").innerText =
+        `Pregunta ${indicePersonalidad + 1} de ${preguntasPersonalidadActuales.length}`;
+
+    document.getElementById("pregunta-personalidad").innerText =
+        pregunta.q;
+
+    const opciones = pregunta.a || [
+        "Casi nunca",
+        "A veces",
+        "Con frecuencia",
+        "Casi siempre"
+    ];
+
+    document.getElementById("opciones-personalidad").innerHTML =
+        opciones.map((opcion, indice) => `
+            <div class="opcion"
+                 onclick="responderPersonalidad(${indice}, this)">
+                <strong>${indice + 1}.</strong> ${opcion}
+            </div>
+        `).join("");
+
+    const boton = document.getElementById("siguiente-personalidad");
+
+    boton.disabled = true;
+    boton.className = "btn-rojo btn-disabled";
+    boton.innerText = "Selecciona una respuesta";
+}
+
+function responderPersonalidad(indiceRespuesta, elemento) {
+    const opciones =
+        document.querySelectorAll("#opciones-personalidad .opcion");
+
+    opciones.forEach(opcion => {
+        opcion.onclick = null;
+        opcion.style.pointerEvents = "none";
+        opcion.style.opacity = "0.7";
+    });
+
+    elemento.style.background = "#dbeafe";
+    elemento.style.borderColor = "#2563eb";
+    elemento.style.color = "#1e3a8a";
+    elemento.style.opacity = "1";
+
+    respuestasPersonalidad[indicePersonalidad] = indiceRespuesta;
+
+    const boton = document.getElementById("siguiente-personalidad");
+
+    boton.disabled = false;
+    boton.className = "btn-rojo";
+
+    boton.innerText =
+        indicePersonalidad === preguntasPersonalidadActuales.length - 1
+            ? "Finalizar test"
+            : "Siguiente pregunta";
+}
+
+function siguientePersonalidad() {
+    if (respuestasPersonalidad[indicePersonalidad] === undefined) {
+        return;
+    }
+
+    indicePersonalidad++;
+
+    if (indicePersonalidad < preguntasPersonalidadActuales.length) {
+        mostrarPreguntaPersonalidad();
+    } else {
+        finalizarPersonalidad();
+    }
+}
+
+function finalizarPersonalidad() {
+    document.getElementById("visor-personalidad").style.display = "none";
+
+    const resultado = document.getElementById("resultado-personalidad");
+    resultado.style.display = "block";
+
+    let aciertos = 0;
+    let revision = "";
+
+    preguntasPersonalidadActuales.forEach((pregunta, indice) => {
+        const marcada = respuestasPersonalidad[indice];
+        const correcta = pregunta.c;
+
+        const opciones = pregunta.a || [
+            "Casi nunca",
+            "A veces",
+            "Con frecuencia",
+            "Casi siempre"
+        ];
+
+        if (marcada === correcta) {
+            aciertos++;
+        } else {
+            revision += `
+                <div class="item-revision"
+                     style="border-left:5px solid #ef4444; margin:15px 0; padding:15px; background:white;">
+
+                    <strong style="color:#ef4444;">
+                        Pregunta ${indice + 1} — FALLADA
+                    </strong>
+
+                    <p style="font-weight:bold;">
+                        ${pregunta.q}
+                    </p>
+
+                    <p style="color:#ef4444;">
+                        👉 Tu respuesta:
+                        <strong>${opciones[marcada]}</strong>
+                    </p>
+
+                    <p style="color:#16a34a;">
+                        ✓ Respuesta indicada:
+                        <strong>${opciones[correcta]}</strong>
+                    </p>
+                </div>
+            `;
+        }
+    });
+
+    const fallos =
+        preguntasPersonalidadActuales.length - aciertos;
+
+    resultado.innerHTML = `
+        <div class="caja-resultados" style="text-align:center;">
+            <h2>Resultado del test de personalidad</h2>
+
+            <p style="font-size:22px;">
+                Aciertos:
+                <strong style="color:#16a34a;">${aciertos}</strong>
+            </p>
+
+            <p style="font-size:22px;">
+                Fallos:
+                <strong style="color:#ef4444;">${fallos}</strong>
+            </p>
+
+            <button class="btn-rojo"
+                    onclick="comenzarPersonalidad()"
+                    style="margin:15px 5px;">
+                Generar otro test de 50 preguntas
+            </button>
+
+            <button class="btn-rojo"
+                    onclick="volverInicioPersonalidad()"
+                    style="margin:15px 5px; background:#333333;">
+                Volver
+            </button>
+        </div>
+
+        ${
+            fallos > 0
+                ? `<h3>Revisión de respuestas incorrectas</h3>${revision}`
+                : `<h3 style="color:#16a34a; text-align:center;">
+                       ¡Has acertado las 50 preguntas!
+                   </h3>`
+        }
+    `;
+
+    resultado.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+    });
+}
+
+function volverInicioPersonalidad() {
+    document.getElementById("resultado-personalidad").style.display = "none";
+    document.getElementById("visor-personalidad").style.display = "none";
+    document.getElementById("inicio-personalidad").style.display = "block";
+}
 
         // BANCO DE PREGUNTAS (Tema 15 ampliado con tus 50 preguntas en total)
         const banco = [
