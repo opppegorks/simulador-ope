@@ -1075,14 +1075,73 @@ function mostrarPreguntaPersonalidad() {
 }
 
 function responderPersonalidad(indiceRespuesta, elemento) {
+    const pregunta =
+        preguntasPersonalidadActuales[indicePersonalidad];
+
     const opciones =
         document.querySelectorAll("#opciones-personalidad .opcion");
 
-    opciones.forEach(opcion => {
+    respuestasPersonalidad[indicePersonalidad] = indiceRespuesta;
+
+    opciones.forEach((opcion, indice) => {
         opcion.onclick = null;
         opcion.style.pointerEvents = "none";
-        opcion.style.opacity = "0.7";
+
+        // La respuesta correcta siempre aparece en verde
+        if (indice === pregunta.c) {
+            opcion.style.backgroundColor = "#22c55e";
+            opcion.style.borderColor = "#16a34a";
+            opcion.style.color = "#ffffff";
+            opcion.style.fontWeight = "bold";
+        }
     });
+
+    // Si has fallado, tu respuesta aparece en rojo
+    if (indiceRespuesta !== pregunta.c) {
+        elemento.style.backgroundColor = "#ef4444";
+        elemento.style.borderColor = "#dc2626";
+        elemento.style.color = "#ffffff";
+        elemento.style.fontWeight = "bold";
+    }
+
+    // Mensaje de acierto o fallo
+    let mensaje = document.getElementById("mensaje-personalidad");
+
+    if (!mensaje) {
+        mensaje = document.createElement("p");
+        mensaje.id = "mensaje-personalidad";
+        mensaje.style.fontSize = "18px";
+        mensaje.style.fontWeight = "bold";
+
+        document
+            .getElementById("opciones-personalidad")
+            .after(mensaje);
+    }
+
+    if (indiceRespuesta === pregunta.c) {
+        mensaje.innerHTML = "✅ ¡Respuesta correcta!";
+        mensaje.style.color = "#16a34a";
+    } else {
+        mensaje.innerHTML = "❌ Respuesta incorrecta";
+        mensaje.style.color = "#dc2626";
+    }
+
+    const boton =
+        document.getElementById("siguiente-personalidad");
+
+    boton.disabled = false;
+    boton.className = "btn-rojo";
+    boton.style.width = "auto";
+    boton.style.padding = "12px 35px";
+    boton.style.marginTop = "20px";
+    boton.style.fontSize = "16px";
+    boton.style.fontWeight = "bold";
+
+    boton.innerText =
+        indicePersonalidad === preguntasPersonalidadActuales.length - 1
+            ? "Finalizar Test"
+            : "Siguiente Pregunta ➡️";
+}
 
     elemento.style.background = "#dbeafe";
     elemento.style.borderColor = "#2563eb";
