@@ -79,6 +79,7 @@
         <nav class="sidebar">
     <button onclick="seccion('teoria')">📚 Teoría y Tests</button>
     <button onclick="seccion('psicos')">🧩 Psicotécnicos</button>
+    <button onclick="seccion('personalidad')">🧠 Personalidad</button>
     <button onclick="comenzarExamen('general')">🚀 Simulacro General</button>
     <button onclick="comenzarSimulacroEquilibrado()">⚖️ Simulacro Equilibrado</button>
 </nav>
@@ -163,6 +164,38 @@ onclick="comenzarExamen('psico_refranes')"
             </div>
         </div>
     </section>
+
+<section id="personalidad" style="display:none;">
+    <div class="tarjeta">
+        <h2>🧠 Test de Personalidad</h2>
+
+        <p>
+            Practica cuestionarios de personalidad similares a los utilizados
+            en los procesos selectivos.
+        </p>
+
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(250px, 1fr)); gap:20px; margin-top:20px;">
+
+            <div style="background:#ffffff; border:2px solid #e0e0e0; border-radius:12px; padding:20px; box-shadow:0 4px 6px rgba(0,0,0,0.05);">
+                <div style="font-size:2rem; margin-bottom:10px;">📝</div>
+
+                <h3 style="margin:0 0 8px 0; color:#333;">
+                    Cuestionario de personalidad
+                </h3>
+
+                <p style="margin:0 0 15px 0; font-size:0.9rem; color:#666;">
+                    Responde con sinceridad y revisa tu perfil al terminar.
+                </p>
+
+                <button class="btn-rojo" onclick="comenzarPersonalidad()">
+                    Comenzar test
+                </button>
+            </div>
+
+        </div>
+    </div>
+</section>
+
 <section id="simulacro" style="display:none;">
         <div class="tarjeta" style="text-align: center;" id="inicio-simulacro">
             <h2>Simulador de Examen Real</h2>
@@ -2890,11 +2923,15 @@ function actualizarBotonFallos() {
         });
         actualizarBotonFallos();
 
-        function seccion(id) {
-            ['teoria', 'psicos', 'simulacro'].forEach(s => document.getElementById(s).style.display = (s===id ? 'block' : 'none'));
-            document.getElementById('visor-test').style.display = 'none';
-            clearInterval(intervaloTiempo);
-        }
+      function seccion(id) {
+    ['teoria', 'psicos', 'personalidad', 'simulacro'].forEach(s => {
+        document.getElementById(s).style.display =
+            (s === id ? 'block' : 'none');
+    });
+
+    document.getElementById('visor-test').style.display = 'none';
+    clearInterval(intervaloTiempo);
+}
 
         function verResumen(id, titulo) {
             clearInterval(intervaloTiempo);
