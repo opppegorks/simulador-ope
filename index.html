@@ -723,23 +723,23 @@ ${window.respuestasUsuario
                 indicacion = " ❌ TU RESPUESTA";
             }
 
-            return \`
+            return `
                 <div style="
                     margin:7px 0;
                     padding:10px;
                     text-align:left;
-                    background:\${fondo};
-                    border:2px solid \${borde};
+                    background:${fondo};
+                    border:2px solid ${borde};
                     border-radius:7px;
-                    color:\${color};
+                    color:${color};
                 ">
-                    <b>\${letra})</b> \${opcion}
-                    <b>\${indicacion}</b>
+                    <b>${letra})</b> ${opcion}
+                    <b>${indicacion}</b>
                 </div>
-            \`;
+            `;
         }).join("");
 
-        return \`
+return `
             <div style="
                 margin:15px 0;
                 padding:15px;
@@ -749,17 +749,17 @@ ${window.respuestasUsuario
                 border-radius:8px;
             ">
                 <strong>
-                    Pregunta \${idx + 1}
-                    \${esReserva ? " (RESERVA)" : ""}
+                    Pregunta ${idx + 1}
+                    ${esReserva ? " (RESERVA)" : ""}
                 </strong>
 
                 <p style="font-weight:600;">
-                    \${r.pregunta}
+                    ${r.pregunta}
                 </p>
 
-                \${opcionesHTML}
+                ${opcionesHTML}
             </div>
-        \`;
+        `;
     })
     .join("")}
     
