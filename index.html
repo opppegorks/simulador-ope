@@ -782,13 +782,7 @@ ${window.respuestasUsuario
 <script>
 
     const bancoPersonalidad = [
-    {q:"Me resulta fácil mantener la calma en situaciones difíciles.",c:3},
-    {q:"Evito asumir responsabilidades.",c:0},
-    {q:"Trabajo bien formando parte de un equipo.",c:3}
-];
-
-const banco = [
-    {t:"personalidad",q:"Si veo alguien en apuros, hago todo lo posible para ayudar.",a:["Casi nunca","A veces","Con frecuencia","Casi siempre"],c:2},
+{t:"personalidad",q:"Si veo alguien en apuros, hago todo lo posible para ayudar.",a:["Casi nunca","A veces","Con frecuencia","Casi siempre"],c:2},
 {t:"personalidad",q:"Me considero una persona con autoridad sobre los demás.",a:["Casi nunca","A veces","Con frecuencia","Casi siempre"],c:1},
 {t:"personalidad",q:"Intento ser cortés con la gente que me rodea.",a:["Casi nunca","A veces","Con frecuencia","Casi siempre"],c:3},
 {t:"personalidad",q:"He quebrantado alguna norma de importancia menor.",a:["Casi nunca","A veces","Con frecuencia","Casi siempre"],c:1},
@@ -3150,10 +3144,13 @@ function actualizarBotonFallos() {
         });
         actualizarBotonFallos();
 
-      function seccion(id) {
+function seccion(id) {
     ['teoria', 'psicos', 'personalidad', 'simulacro'].forEach(s => {
-        document.getElementById(s).style.display =
-            (s === id ? 'block' : 'none');
+        const apartado = document.getElementById(s);
+
+        if (apartado) {
+            apartado.style.display = s === id ? 'block' : 'none';
+        }
     });
 
     document.getElementById('visor-test').style.display = 'none';
