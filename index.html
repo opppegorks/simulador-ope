@@ -1143,24 +1143,6 @@ function responderPersonalidad(indiceRespuesta, elemento) {
             : "Siguiente Pregunta ➡️";
 }
 
-    elemento.style.background = "#dbeafe";
-    elemento.style.borderColor = "#2563eb";
-    elemento.style.color = "#1e3a8a";
-    elemento.style.opacity = "1";
-
-    respuestasPersonalidad[indicePersonalidad] = indiceRespuesta;
-
-    const boton = document.getElementById("siguiente-personalidad");
-
-    boton.disabled = false;
-    boton.className = "btn-rojo";
-
-    boton.innerText =
-        indicePersonalidad === preguntasPersonalidadActuales.length - 1
-            ? "Finalizar test"
-            : "Siguiente pregunta";
-}
-
 function siguientePersonalidad() {
     if (respuestasPersonalidad[indicePersonalidad] === undefined) {
         return;
